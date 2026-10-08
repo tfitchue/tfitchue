@@ -6,19 +6,19 @@ body {
     margin: 0;
     padding: 20px;
     min-height: 100vh;
-    background: #063fbc;
     color: white;
     font-family: "Segoe UI", Arial, sans-serif;
-    isolation: isolate;
+
+    background-color: #063fbc;
+    background-image: url("./logo.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: url("./logo.png") center center / cover no-repeat;
-    pointer-events: none;
-    z-index: -1;
+    content: none;
 }
 
 main {
