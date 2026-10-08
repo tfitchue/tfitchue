@@ -1,36 +1,28 @@
-body{
-    margin:0;
-    padding:20px;
-    background:
-        linear-gradient(rgba(6,63,188,.95), rgba(6,63,188,.95)),
-        url('logo.png');
-    background-repeat:no-repeat;
-    background-position:center;
-    background-size:70%;
-    color:white;
-    font-family:Segoe UI,Arial,sans-serif;
+html {
+    min-height: 100%;
 }
+
+body {
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    background: #063fbc;
+    color: white;
+    font-family: "Segoe UI", Arial, sans-serif;
+    isolation: isolate;
+}
+
 body::before {
     content: "";
     position: fixed;
     inset: 0;
     background: url("logo.png") center center / cover no-repeat;
-    opacity: 1;
     pointer-events: none;
-    z-index: 0;
+    z-index: -1;
 }
 
 main {
     position: relative;
-    z-index: 1;
     width: 100%;
     transform-origin: top left;
-}
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: url("logo.png") center center / cover no-repeat;
-    pointer-events: none;
-    z-index: 0;
 }
