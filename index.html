@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FSOC Weather & U.S. News</title>
+<title>FSOC Weather & USA News</title>
 
 <style>
 * {
@@ -12,27 +12,41 @@
 
 html,
 body {
+    margin: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
 
 body {
-    margin: 0;
     padding: 12px;
+    background: #063fbc;
     color: white;
     font-family: "Segoe UI", Arial, sans-serif;
-    background: #03152f;
 }
 
-/* Full-page background image. */
-body::before {
-    content: "";
+#pageBackground {
     position: fixed;
     inset: 0;
-    background: url("image.png") center center / cover no-repeat;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     pointer-events: none;
     z-index: 0;
+}
+
+#backgroundError {
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+    z-index: 2;
+    max-width: 400px;
+    padding: 10px;
+    border-radius: 6px;
+    background: #8b1926;
+    color: white;
+    font-size: 13px;
 }
 
 main {
@@ -42,7 +56,6 @@ main {
     transform-origin: top left;
 }
 
-/* All five cities remain horizontal. */
 .weather-grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(245px, 1fr));
@@ -52,7 +65,7 @@ main {
 
 .card,
 .panel {
-    background: rgba(2, 16, 43, 0.84);
+    background: rgba(2, 16, 43, .82);
     border: 1px solid #ffffff30;
     border-radius: 12px;
     padding: 12px;
@@ -60,8 +73,8 @@ main {
 }
 
 .card {
-    border-top: 4px solid #ff6600;
     text-align: center;
+    border-top: 4px solid #ff6600;
 }
 
 .city {
@@ -71,17 +84,17 @@ main {
 }
 
 .zone {
-    font-size: 12px;
-    color: #acc8f5;
-    letter-spacing: 1px;
     margin-top: 5px;
+    color: #acc8f5;
+    font-size: 12px;
+    letter-spacing: 1px;
 }
 
 .time {
-    font-size: 30px;
-    color: #ff8b3d;
-    font-weight: 750;
     margin: 8px 0;
+    color: #ff8b3d;
+    font-size: 30px;
+    font-weight: 750;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
@@ -108,15 +121,15 @@ main {
 }
 
 .section {
+    margin-top: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #ffffff40;
     color: #ffb17c;
-    text-transform: uppercase;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 1px;
+    text-transform: uppercase;
     text-align: left;
-    border-bottom: 1px solid #ffffff40;
-    padding: 6px 0;
-    margin-top: 10px;
 }
 
 .row {
@@ -129,21 +142,14 @@ main {
 }
 
 .row span {
-    text-align: left;
     color: #bdd3f4;
+    text-align: left;
 }
 
 .row strong {
     text-align: right;
 }
 
-.stamp {
-    font-size: 11px;
-    color: #a9c1e4;
-    margin-top: 8px;
-}
-
-/* News and national weather risks sit beside each other. */
 .awareness-grid {
     display: grid;
     grid-template-columns: 1.25fr 1fr;
@@ -161,9 +167,6 @@ main {
 }
 
 .panel-heading {
-    display: flex;
-    align-items: center;
-    gap: 12px;
     margin-bottom: 8px;
 }
 
@@ -174,12 +177,12 @@ main {
 
 .badge {
     display: inline-block;
-    background: #c93240;
-    border-radius: 6px;
-    padding: 5px 9px;
-    letter-spacing: 1px;
-    font-size: 15px;
     margin-right: 10px;
+    padding: 5px 9px;
+    border-radius: 6px;
+    background: #c93240;
+    font-size: 15px;
+    letter-spacing: 1px;
 }
 
 .news-grid,
@@ -190,26 +193,25 @@ main {
     margin-top: 8px;
 }
 
-.headline {
-    display: flex;
-    flex-direction: column;
+.headline,
+.risk-card {
+    min-width: 0;
+    padding: 10px;
     border: 1px solid #ffffff25;
     border-radius: 10px;
-    padding: 10px;
     background: #ffffff05;
-    min-width: 0;
 }
 
 .headline a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    line-height: 1.25;
-    font-weight: 650;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    color: white;
+    font-size: 18px;
+    font-weight: 650;
+    line-height: 1.25;
+    text-decoration: none;
 }
 
 .headline a:hover {
@@ -217,44 +219,41 @@ main {
 }
 
 .risk-card {
-    padding: 10px;
+    border-color: #ffad4560;
     background: #ffab4510;
-    border: 1px solid #ffad4560;
-    border-radius: 10px;
-    min-width: 0;
 }
 
 .risk-card strong {
     display: block;
-    font-size: 17px;
     color: #ffbd73;
+    font-size: 17px;
 }
 
 .risk-card p {
-    margin: 6px 0;
-    font-size: 13px;
-    line-height: 1.35;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    margin: 6px 0;
+    font-size: 13px;
+    line-height: 1.35;
 }
 
 .meta {
+    margin-top: 7px;
     color: #aac4ec;
     font-size: 12px;
-    margin-top: 7px;
 }
 
 .status {
-    font-size: 13px;
     color: #bfd3f1;
+    font-size: 13px;
 }
 
 .note,
 .footer {
-    font-size: 11px;
     color: #abc5ed;
+    font-size: 11px;
     line-height: 1.5;
 }
 
@@ -263,8 +262,9 @@ main {
 }
 
 .footer {
-    text-align: center;
     margin-top: 8px;
+    padding: 4px;
+    text-align: center;
     text-shadow: 0 1px 4px #000;
 }
 
@@ -275,6 +275,13 @@ a {
 </head>
 
 <body>
+<img id="pageBackground" src="./logo.png" alt="" aria-hidden="true">
+
+<div id="backgroundError" role="status" hidden>
+    Cannot load logo.png. Put it in the same folder as this HTML file.
+    Online previews require the image to be uploaded to the preview as well.
+</div>
+
 <main>
     <div id="weatherGrid" class="weather-grid"></div>
 
@@ -295,7 +302,7 @@ a {
 
             <p class="note">
                 Latest U.S. headlines via Google News RSS.
-                Not all headlines are designated breaking by their publishers.
+                Not all headlines are designated breaking by publishers.
                 Updates every 5 minutes.
             </p>
         </section>
@@ -323,7 +330,6 @@ a {
 
     <div class="footer">
         <div id="weatherStatus" role="status">Loading weather…</div>
-
         Weather:
         <a href="https://open-meteo.com/"
            target="_blank"
@@ -339,6 +345,25 @@ a {
 
 <script>
 "use strict";
+
+const background = document.getElementById("pageBackground");
+const backgroundError = document.getElementById("backgroundError");
+
+function checkBackground() {
+    if (background.complete) {
+        backgroundError.hidden = background.naturalWidth > 0;
+    }
+}
+
+background.addEventListener("load", () => {
+    backgroundError.hidden = true;
+});
+
+background.addEventListener("error", () => {
+    backgroundError.hidden = false;
+});
+
+checkBackground();
 
 const REFRESH_INTERVAL = 300000;
 const WEATHER_ENDPOINT = "https://api.open-meteo.com/v1/forecast";
@@ -447,11 +472,8 @@ document.getElementById("weatherGrid").innerHTML =
             <div class="temp">--°F</div>
             <div class="condition">Loading…</div>
             <div class="feels"></div>
-
             <div class="section">Current conditions</div>
             <div class="current"></div>
-
-            <div class="stamp">No data loaded</div>
         </article>
     `).join("");
 
@@ -476,9 +498,7 @@ async function getJSON(url) {
     try {
         const response = await fetch(url, {
             signal: controller.signal,
-            headers: {
-                Accept: "application/json"
-            }
+            headers: { Accept: "application/json" }
         });
 
         if (!response.ok) {
@@ -553,7 +573,9 @@ async function updateWeather() {
                     number(current.temperature_2m) + "°F";
 
                 q(".feels").textContent =
-                    "Feels like " + number(current.apparent_temperature) + "°F";
+                    "Feels like " +
+                    number(current.apparent_temperature) +
+                    "°F";
 
                 const directions = [
                     "N", "NE", "E", "SE", "S", "SW", "W", "NW"
@@ -572,40 +594,21 @@ async function updateWeather() {
                         : current.visibility / 1609.344;
 
                 q(".current").innerHTML = [
-                    ["Humidity",
-                        number(current.relative_humidity_2m) + "%"],
-                    ["Wind",
-                        number(current.wind_speed_10m) + " mph " + direction],
-                    ["Gusts",
-                        number(current.wind_gusts_10m) + " mph"],
-                    ["Visibility",
-                        number(visibility, 1) + " mi"],
-                    ["Cloud cover",
-                        number(current.cloud_cover) + "%"],
-                    ["Precip. (15 min)",
-                        number(current.precipitation, 2) + " in"],
-                    ["Surface pressure",
-                        number(current.surface_pressure) + " hPa"]
+                    ["Humidity", number(current.relative_humidity_2m) + "%"],
+                    ["Wind", number(current.wind_speed_10m) + " mph " + direction],
+                    ["Gusts", number(current.wind_gusts_10m) + " mph"],
+                    ["Visibility", number(visibility, 1) + " mi"],
+                    ["Cloud cover", number(current.cloud_cover) + "%"],
+                    ["Precip. (15 min)", number(current.precipitation, 2) + " in"],
+                    ["Surface pressure", number(current.surface_pressure) + " hPa"]
                 ].map(values => row(...values)).join("");
-
-                q(".stamp").textContent =
-                    "Model time: " +
-                    current.time.replace("T", " ") +
-                    " local";
 
                 card.dataset.loaded = "true";
                 successful++;
             } catch {
-                q(".stamp").textContent =
-                    (card.dataset.loaded
-                        ? "STALE — showing last successful data. "
-                        : "") +
-                    "Update failed: " +
-                    new Date().toLocaleTimeString();
-
-                if (!card.dataset.loaded) {
-                    q(".condition").textContent = "Data unavailable";
-                }
+                q(".condition").textContent = card.dataset.loaded
+                    ? "Update failed — showing previous weather"
+                    : "Data unavailable";
             }
         }));
 
@@ -660,10 +663,7 @@ async function updateNews() {
 
             try {
                 link = new URL(item.link);
-
-                if (!["https:", "http:"].includes(link.protocol)) {
-                    return;
-                }
+                if (!["https:", "http:"].includes(link.protocol)) return;
             } catch {
                 return;
             }
@@ -837,7 +837,6 @@ async function updateNationalRisks() {
     }
 }
 
-/* Fit the entire dashboard into one browser view. */
 const display = document.querySelector("main");
 let fitFrame = 0;
 
