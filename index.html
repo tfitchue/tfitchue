@@ -6,12 +6,9 @@
 <title>FSOC Weather & U.S. News</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html,
-body {
+html, body {
     height: 100%;
     overflow: hidden;
 }
@@ -22,11 +19,7 @@ body {
     color: #fff;
     font-family: "Segoe UI", Arial, sans-serif;
     background:
-        radial-gradient(
-            ellipse at top right,
-            #175acd,
-            transparent 65%
-        ),
+        radial-gradient(ellipse at top right, #175acd, transparent 65%),
         linear-gradient(135deg, #03152f, #063fbc);
     min-height: 100vh;
 }
@@ -35,8 +28,7 @@ body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background:
-        url("logo.png") center / 85% auto no-repeat;
+    background: url("logo.png") center / 85% auto no-repeat;
     opacity: .09;
     pointer-events: none;
 }
@@ -55,8 +47,7 @@ main {
     gap: 10px;
 }
 
-.card,
-.news-panel {
+.card, .news-panel {
     background: rgba(2, 16, 43, .84);
     border: 1px solid #ffffff30;
     border-radius: 12px;
@@ -138,9 +129,7 @@ main {
     color: #bdd3f4;
 }
 
-.row strong {
-    text-align: right;
-}
+.row strong { text-align: right; }
 
 .highlow {
     display: flex;
@@ -150,33 +139,8 @@ main {
     padding: 8px 0;
 }
 
-.high {
-    color: #ffad74;
-}
-
-.low {
-    color: #8ccaff;
-}
-
-.impact {
-    margin-top: 8px;
-    border: 1px solid #56c8a1;
-    background: #15694b44;
-    border-radius: 10px;
-    padding: 8px;
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.impact.caution {
-    border-color: #ffb64d;
-    background: #ad6b1533;
-}
-
-.impact.warning {
-    border-color: #ff6868;
-    background: #a324343f;
-}
+.high { color: #ffad74; }
+.low { color: #8ccaff; }
 
 .stamp {
     font-size: 11px;
@@ -184,7 +148,14 @@ main {
     margin-top: 8px;
 }
 
-/* Stationary news cards, without a ticker. */
+/* Breaking news and USA risks stay beside each other. */
+.awareness-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 12px;
+    min-width: 1280px;
+}
+
 .news-panel {
     margin-top: 12px;
     border-top: 4px solid #ed4c55;
@@ -215,7 +186,7 @@ main {
 
 .news-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
 }
 
@@ -240,9 +211,7 @@ main {
     overflow: hidden;
 }
 
-.headline a:hover {
-    text-decoration: underline;
-}
+.headline a:hover { text-decoration: underline; }
 
 .meta {
     color: #aac4ec;
@@ -250,15 +219,12 @@ main {
     margin-top: 7px;
 }
 
-.note,
-.footer {
+.note, .footer {
     font-size: 11px;
     color: #abc5ed;
 }
 
-.note {
-    margin: 8px 0 0;
-}
+.note { margin: 8px 0 0; }
 
 .footer {
     text-align: center;
@@ -266,91 +232,107 @@ main {
     line-height: 1.5;
 }
 
-a {
-    color: #b8dbff;
-}
-
-button {
-    background: #123c78;
-    color: white;
-    border: 1px solid #ffffff40;
-    border-radius: 6px;
-    padding: 8px 12px;
-    cursor: pointer;
-}
-
-button:disabled {
-    opacity: .5;
-}
+a { color: #b8dbff; }
 
 .news-status {
     font-size: 13px;
     color: #bfd3f1;
 }
+
+.risks-panel { border-top-color: #ffad45; }
+
+.risk-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.risk-card {
+    padding: 10px;
+    background: #ffab4510;
+    border: 1px solid #ffad4560;
+    border-radius: 10px;
+    min-width: 0;
+}
+
+.risk-card strong {
+    display: block;
+    font-size: 17px;
+    color: #ffbd73;
+}
+
+.risk-card p {
+    margin: 6px 0;
+    font-size: 13px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.risk-card .meta { margin-top: 5px; }
 </style>
 </head>
 
 <body>
 <main>
-
     <div class="grid" id="weatherGrid"></div>
 
-    <section
-        class="news-panel"
-        aria-label="United States breaking news"
-    >
-        <div class="news-heading">
-            <h2>
-                <span class="badge">BREAKING NEWS</span>
-                United States
-            </h2>
+    <div class="awareness-grid">
+        <section class="news-panel" aria-label="United States breaking news">
+            <div class="news-heading">
+                <h2>
+                    <span class="badge">BREAKING NEWS</span>
+                    United States
+                </h2>
+            </div>
 
-            <button id="refreshNews" type="button">
-                Refresh news
-            </button>
-        </div>
+            <div id="newsStatus" class="news-status" role="status">
+                Loading U.S. headlines…
+            </div>
 
-        <div
-            id="newsStatus"
-            class="news-status"
-            role="status"
-        >
-            Loading U.S. headlines…
-        </div>
+            <div id="newsGrid" class="news-grid"></div>
 
-        <div id="newsGrid" class="news-grid"></div>
+            <p class="note">
+                Latest U.S. headlines via Google News RSS.
+                Feed headlines are not all designated breaking by their publishers.
+                Static cards • refresh every 5 minutes • no ticker.
+            </p>
+        </section>
 
-        <p class="note">
-            Latest U.S. headlines via Google News RSS.
-            Feed headlines are not all designated breaking
-            by their publishers.
-            Static cards • refresh every 5 minutes • no ticker.
-        </p>
-    </section>
+        <section class="news-panel risks-panel" aria-label="USA weather risks">
+            <div class="news-heading">
+                <h2>USA Weather Risks</h2>
+            </div>
 
-    <div class="footer">
-        <div id="weatherStatus" role="status">
-            Loading weather…
-        </div>
+            <div id="riskStatus" class="news-status" role="status">
+                Loading national alerts…
+            </div>
 
-        Weather:
-        <a
-            href="https://open-meteo.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-        >Open-Meteo</a>
-        • modeled conditions • refresh every 5 minutes
-        <br>
+            <div id="riskGrid" class="risk-grid"></div>
 
-        Weather indicators are screening thresholds,
-        not official warnings.
-        <a
-            href="https://www.weather.gov/"
-            target="_blank"
-            rel="noopener noreferrer"
-        >Official NWS alerts</a>
+            <p class="note">
+                National Weather Service • highest-severity active alerts shown
+                • updates every 5 minutes.
+                <a href="https://www.weather.gov/"
+                   target="_blank" rel="noopener noreferrer">View all alerts</a>
+            </p>
+        </section>
     </div>
 
+    <div class="footer">
+        <div id="weatherStatus" role="status">Loading weather…</div>
+        Weather:
+        <a href="https://open-meteo.com/"
+           target="_blank" rel="noopener noreferrer">Open-Meteo</a>
+        • modeled conditions • refresh every 5 minutes
+        <br>
+        USA Weather Risks: official National Weather Service alerts.
+        <a href="https://www.weather.gov/"
+           target="_blank" rel="noopener noreferrer">Official NWS alerts</a>
+    </div>
 </main>
 
 <script>
@@ -358,53 +340,36 @@ button:disabled {
 
 // Optional watermark: place logo.png beside this HTML file.
 // For commercial use, configure your licensed weather endpoint/key.
-const WEATHER_ENDPOINT =
-    "https://api.open-meteo.com/v1/forecast";
-
+const WEATHER_ENDPOINT = "https://api.open-meteo.com/v1/forecast";
 const NEWS_FEED =
     "https://news.google.com/rss/headlines/section/topic/NATION" +
     "?hl=en-US&gl=US&ceid=US:en";
 
 const cities = [
     {
-        id: "harrison",
-        name: "Harrison, AR",
-        lat: 36.2298,
-        lon: -93.1077,
-        tz: "America/Chicago",
-        zone: "CENTRAL"
+        id: "harrison", name: "Harrison, AR",
+        lat: 36.2298, lon: -93.1077,
+        tz: "America/Chicago", zone: "CENTRAL"
     },
     {
-        id: "memphis",
-        name: "Memphis, TN",
-        lat: 35.1495,
-        lon: -90.049,
-        tz: "America/Chicago",
-        zone: "CENTRAL"
+        id: "memphis", name: "Memphis, TN",
+        lat: 35.1495, lon: -90.049,
+        tz: "America/Chicago", zone: "CENTRAL"
     },
     {
-        id: "newyork",
-        name: "New York, NY",
-        lat: 40.7128,
-        lon: -74.006,
-        tz: "America/New_York",
-        zone: "EASTERN"
+        id: "newyork", name: "New York, NY",
+        lat: 40.7128, lon: -74.006,
+        tz: "America/New_York", zone: "EASTERN"
     },
     {
-        id: "losangeles",
-        name: "Los Angeles, CA",
-        lat: 34.0522,
-        lon: -118.2437,
-        tz: "America/Los_Angeles",
-        zone: "PACIFIC"
+        id: "losangeles", name: "Los Angeles, CA",
+        lat: 34.0522, lon: -118.2437,
+        tz: "America/Los_Angeles", zone: "PACIFIC"
     },
     {
-        id: "denver",
-        name: "Denver, CO",
-        lat: 39.7392,
-        lon: -104.9903,
-        tz: "America/Denver",
-        zone: "MOUNTAIN"
+        id: "denver", name: "Denver, CO",
+        lat: 39.7392, lon: -104.9903,
+        tz: "America/Denver", zone: "MOUNTAIN"
     }
 ];
 
@@ -440,8 +405,7 @@ const codes = {
 };
 
 function number(value, digits = 0) {
-    return typeof value === "number" &&
-        Number.isFinite(value)
+    return typeof value === "number" && Number.isFinite(value)
         ? value.toFixed(digits)
         : "--";
 }
@@ -457,147 +421,54 @@ function row(label, value) {
 
 function solar(value) {
     if (!value) return "--";
-
-    const [hour, minute] =
-        value.split("T")[1].split(":");
-
-    return (
-        (+hour % 12 || 12) +
-        ":" +
-        minute +
-        (+hour >= 12 ? " PM" : " AM")
-    );
+    const [hour, minute] = value.split("T")[1].split(":");
+    return (+hour % 12 || 12) + ":" + minute +
+        (+hour >= 12 ? " PM" : " AM");
 }
 
-function impact(current) {
-    const issues = [];
-    let severity = 0;
-
-    function add(level, text) {
-        severity = Math.max(severity, level);
-        issues.push(text);
-    }
-
-    if (current.wind_gusts_10m >= 45) {
-        add(2, "Strong wind gusts");
-    } else if (
-        current.wind_gusts_10m >= 30 ||
-        current.wind_speed_10m >= 25
-    ) {
-        add(1, "Elevated winds");
-    }
-
-    if (
-        current.visibility != null &&
-        current.visibility < 1609.344
-    ) {
-        add(2, "Very low visibility");
-    } else if (
-        current.visibility != null &&
-        current.visibility < 4828
-    ) {
-        add(1, "Reduced visibility");
-    }
-
-    if ([56, 57, 66, 67].includes(current.weather_code)) {
-        add(2, "Freezing precipitation");
-    }
-
-    if (
-        [71, 73, 75, 77, 85, 86].includes(
-            current.weather_code
-        )
-    ) {
-        add(1, "Snow / winter road hazards");
-    }
-
-    if ([95, 96, 99].includes(current.weather_code)) {
-        add(2, "Thunderstorms");
-    }
-
-    if (current.precipitation >= .25) {
-        add(1, "Significant precipitation");
-    }
-
-    if (
-        current.temperature_2m != null &&
-        current.temperature_2m <= 32 &&
-        current.precipitation > 0
-    ) {
-        add(2, "Potential icing");
-    }
-
-    return {
-        level: ["normal", "caution", "warning"][severity],
-        text: issues.length
-            ? issues.join(" • ")
-            : "No preset thresholds exceeded"
-    };
-}
-
-// Create the five weather cards.
 document.getElementById("weatherGrid").innerHTML =
     cities.map(city => `
         <article class="card" id="${city.id}">
             <div class="city">${city.name}</div>
             <div class="zone">${city.zone} TIME</div>
-
             <div class="time"></div>
             <div class="icon">🌤️</div>
             <div class="temp">--°F</div>
             <div class="condition">Loading…</div>
             <div class="feels"></div>
-
             <div class="section">Current conditions</div>
             <div class="current"></div>
-
             <div class="section">Today’s forecast</div>
             <div class="highlow"></div>
             <div class="forecast"></div>
-
-            <div class="section">
-                Freight weather awareness
-            </div>
-            <div class="impact">Checking conditions…</div>
             <div class="stamp">No data loaded</div>
         </article>
     `).join("");
 
 function clocks() {
     const now = new Date();
-
     cities.forEach(city => {
-        document.querySelector(
-            "#" + city.id + " .time"
-        ).textContent = now.toLocaleTimeString(
-            "en-US",
-            {
+        document.querySelector("#" + city.id + " .time").textContent =
+            now.toLocaleTimeString("en-US", {
                 timeZone: city.tz,
                 hour: "2-digit",
                 minute: "2-digit",
                 second: "2-digit"
-            }
-        );
+            });
     });
 }
 
 async function getJSON(url) {
     const controller = new AbortController();
-
-    const timer = setTimeout(
-        () => controller.abort(),
-        20000
-    );
+    const timer = setTimeout(() => controller.abort(), 20000);
 
     try {
         const response = await fetch(url, {
             signal: controller.signal
         });
-
         if (!response.ok) {
             throw new Error("HTTP " + response.status);
         }
-
         return await response.json();
     } finally {
         clearTimeout(timer);
@@ -608,25 +479,19 @@ let weatherBusy = false;
 
 async function weather() {
     if (weatherBusy) return;
-
     weatherBusy = true;
     let count = 0;
 
     try {
         await Promise.all(cities.map(async city => {
-            const card =
-                document.getElementById(city.id);
-
-            const q = selector =>
-                card.querySelector(selector);
+            const card = document.getElementById(city.id);
+            const q = selector => card.querySelector(selector);
 
             try {
                 const url = new URL(WEATHER_ENDPOINT);
-
                 url.search = new URLSearchParams({
                     latitude: city.lat,
                     longitude: city.lon,
-
                     current: [
                         "temperature_2m",
                         "relative_humidity_2m",
@@ -641,7 +506,6 @@ async function weather() {
                         "visibility",
                         "surface_pressure"
                     ].join(","),
-
                     daily: [
                         "temperature_2m_max",
                         "temperature_2m_min",
@@ -650,7 +514,6 @@ async function weather() {
                         "sunrise",
                         "sunset"
                     ].join(","),
-
                     temperature_unit: "fahrenheit",
                     wind_speed_unit: "mph",
                     precipitation_unit: "inch",
@@ -662,166 +525,68 @@ async function weather() {
                 const c = data.current;
                 const d = data.daily;
 
-                if (
-                    !c ||
-                    !d ||
-                    c.temperature_2m == null
-                ) {
+                if (!c || !d || c.temperature_2m == null) {
                     throw new Error("Incomplete data");
                 }
 
-                const condition =
-                    codes[c.weather_code] ||
-                    ["❓", "Unknown"];
+                const condition = codes[c.weather_code] || ["❓", "Unknown"];
 
                 q(".icon").textContent =
-                    c.is_day === 0 &&
-                    [0, 1].includes(c.weather_code)
-                    ? "🌙"
-                    : condition[0];
-
-                q(".condition").textContent =
-                    condition[1];
-
-                q(".temp").textContent =
-                    number(c.temperature_2m) + "°F";
-
+                    c.is_day === 0 && [0, 1].includes(c.weather_code)
+                        ? "🌙" : condition[0];
+                q(".condition").textContent = condition[1];
+                q(".temp").textContent = number(c.temperature_2m) + "°F";
                 q(".feels").textContent =
-                    "Feels like " +
-                    number(c.apparent_temperature) +
-                    "°F";
+                    "Feels like " + number(c.apparent_temperature) + "°F";
 
-                const directions = [
-                    "N", "NE", "E", "SE",
-                    "S", "SW", "W", "NW"
-                ];
-
-                const direction =
-                    c.wind_direction_10m == null
+                const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+                const direction = c.wind_direction_10m == null
                     ? "--"
-                    : directions[
-                        Math.round(
-                            c.wind_direction_10m / 45
-                        ) % 8
-                    ];
-
-                const visibility =
-                    c.visibility == null
-                    ? null
-                    : c.visibility / 1609.344;
+                    : directions[Math.round(c.wind_direction_10m / 45) % 8];
+                const visibility = c.visibility == null
+                    ? null : c.visibility / 1609.344;
 
                 q(".current").innerHTML = [
-                    [
-                        "Humidity",
-                        number(c.relative_humidity_2m) + "%"
-                    ],
-                    [
-                        "Wind",
-                        number(c.wind_speed_10m) +
-                        " mph " + direction
-                    ],
-                    [
-                        "Gusts",
-                        number(c.wind_gusts_10m) + " mph"
-                    ],
-                    [
-                        "Visibility",
-                        number(visibility, 1) + " mi"
-                    ],
-                    [
-                        "Cloud cover",
-                        number(c.cloud_cover) + "%"
-                    ],
-                    [
-                        "Precip. (15 min)",
-                        number(c.precipitation, 2) + " in"
-                    ],
-                    [
-                        "Surface pressure",
-                        number(c.surface_pressure) + " hPa"
-                    ]
+                    ["Humidity", number(c.relative_humidity_2m) + "%"],
+                    ["Wind", number(c.wind_speed_10m) + " mph " + direction],
+                    ["Gusts", number(c.wind_gusts_10m) + " mph"],
+                    ["Visibility", number(visibility, 1) + " mi"],
+                    ["Cloud cover", number(c.cloud_cover) + "%"],
+                    ["Precip. (15 min)", number(c.precipitation, 2) + " in"],
+                    ["Surface pressure", number(c.surface_pressure) + " hPa"]
                 ].map(values => row(...values)).join("");
 
                 q(".highlow").innerHTML = `
-                    <span class="high">
-                        ↑ ${number(
-                            d.temperature_2m_max?.[0]
-                        )}°F
-                    </span>
-                    <span class="low">
-                        ↓ ${number(
-                            d.temperature_2m_min?.[0]
-                        )}°F
-                    </span>
+                    <span class="high">↑ ${number(d.temperature_2m_max?.[0])}°F</span>
+                    <span class="low">↓ ${number(d.temperature_2m_min?.[0])}°F</span>
                 `;
 
                 q(".forecast").innerHTML = [
-                    [
-                        "Precip. chance",
-                        number(
-                            d.precipitation_probability_max?.[0]
-                        ) + "%"
-                    ],
-                    [
-                        "Max UV",
-                        number(d.uv_index_max?.[0], 1)
-                    ],
-                    [
-                        "Sunrise",
-                        solar(d.sunrise?.[0])
-                    ],
-                    [
-                        "Sunset",
-                        solar(d.sunset?.[0])
-                    ]
+                    ["Precip. chance", number(d.precipitation_probability_max?.[0]) + "%"],
+                    ["Max UV", number(d.uv_index_max?.[0], 1)],
+                    ["Sunrise", solar(d.sunrise?.[0])],
+                    ["Sunset", solar(d.sunset?.[0])]
                 ].map(values => row(...values)).join("");
 
-                const indicator = impact(c);
-
-                q(".impact").className =
-                    "impact " + indicator.level;
-
-                q(".impact").textContent =
-                    indicator.text;
-
                 q(".stamp").textContent =
-                    "Model time: " +
-                    c.time.replace("T", " ") +
-                    " local";
+                    "Model time: " + c.time.replace("T", " ") + " local";
 
                 card.dataset.loaded = "true";
                 count++;
-
             } catch (error) {
                 q(".stamp").textContent =
-                    (
-                        card.dataset.loaded
-                        ? "STALE — showing last successful data. "
-                        : ""
-                    ) +
-                    "Refresh failed: " +
-                    new Date().toLocaleTimeString();
-
-                q(".impact").className =
-                    "impact caution";
-
-                q(".impact").textContent =
-                    "Current weather unavailable";
+                    (card.dataset.loaded
+                        ? "STALE — showing last successful data. " : "") +
+                    "Refresh failed: " + new Date().toLocaleTimeString();
 
                 if (!card.dataset.loaded) {
-                    q(".condition").textContent =
-                        "Data unavailable";
+                    q(".condition").textContent = "Data unavailable";
                 }
             }
         }));
 
-        document.getElementById(
-            "weatherStatus"
-        ).textContent =
-            count +
-            "/5 cities refreshed • " +
-            new Date().toLocaleString();
-
+        document.getElementById("weatherStatus").textContent =
+            count + "/5 cities refreshed • " + new Date().toLocaleString();
     } finally {
         weatherBusy = false;
     }
@@ -831,124 +596,66 @@ let newsBusy = false;
 
 async function news() {
     if (newsBusy) return;
-
     newsBusy = true;
 
-    const status =
-        document.getElementById("newsStatus");
-
-    const button =
-        document.getElementById("refreshNews");
-
-    const grid =
-        document.getElementById("newsGrid");
-
-    button.disabled = true;
+    const status = document.getElementById("newsStatus");
+    const grid = document.getElementById("newsGrid");
     status.textContent = "Refreshing U.S. headlines…";
 
     try {
-        const url = new URL(
-            "https://api.rss2json.com/v1/api.json"
-        );
-
+        const url = new URL("https://api.rss2json.com/v1/api.json");
         url.searchParams.set("rss_url", NEWS_FEED);
-
         const data = await getJSON(url);
 
-        if (
-            data.status !== "ok" ||
-            !Array.isArray(data.items)
-        ) {
+        if (data.status !== "ok" || !Array.isArray(data.items)) {
             throw new Error("Feed unavailable");
         }
 
         const seen = new Set();
-
         const items = data.items.filter(item => {
-            if (
-                !item.title ||
-                !item.link ||
-                seen.has(item.title)
-            ) {
+            if (!item.title || !item.link || seen.has(item.title)) {
                 return false;
             }
-
             seen.add(item.title);
             return true;
         }).slice(0, 6);
 
-        if (!items.length) {
-            throw new Error("No headlines");
-        }
+        if (!items.length) throw new Error("No headlines");
 
-        const fragment =
-            document.createDocumentFragment();
+        const fragment = document.createDocumentFragment();
 
         items.forEach(item => {
             let link;
-
             try {
                 link = new URL(item.link);
-
-                if (
-                    !["https:", "http:"].includes(
-                        link.protocol
-                    )
-                ) {
-                    return;
-                }
+                if (!["https:", "http:"].includes(link.protocol)) return;
             } catch {
                 return;
             }
 
-            const card =
-                document.createElement("article");
-
+            const card = document.createElement("article");
             card.className = "headline";
 
-            const anchor =
-                document.createElement("a");
-
+            const anchor = document.createElement("a");
             anchor.href = link.href;
             anchor.target = "_blank";
             anchor.rel = "noopener noreferrer";
 
-            const split =
-                item.title.lastIndexOf(" - ");
-
-            anchor.textContent =
-                split > 0
-                ? item.title.slice(0, split)
-                : item.title;
-
-            // Full headline remains available on hover.
+            const split = item.title.lastIndexOf(" - ");
+            anchor.textContent = split > 0
+                ? item.title.slice(0, split) : item.title;
             anchor.title = anchor.textContent;
 
-            const meta =
-                document.createElement("div");
-
+            const meta = document.createElement("div");
             meta.className = "meta";
 
             const rawDate = item.pubDate || "";
-
-            const normalizedDate =
-                rawDate.replace(" ", "T") +
-                (
-                    rawDate &&
-                    !/[zZ]|[+-]\d\d:\d\d$/.test(rawDate)
-                    ? "Z"
-                    : ""
-                );
-
+            const normalizedDate = rawDate.replace(" ", "T") +
+                (rawDate && !/[zZ]|[+-]\d\d:\d\d$/.test(rawDate) ? "Z" : "");
             const date = new Date(normalizedDate);
-
-            const source =
-                split > 0
-                ? item.title.slice(split + 3)
-                : "Google News";
-
-            const published =
-                Number.isNaN(date.getTime())
+            const source = split > 0
+                ? item.title.slice(split + 3) : "Google News";
+            const published = Number.isNaN(date.getTime())
                 ? "Publication time unavailable"
                 : date.toLocaleString("en-US", {
                     month: "short",
@@ -957,55 +664,109 @@ async function news() {
                     minute: "2-digit"
                 });
 
-            meta.textContent =
-                source + " • " + published;
-
+            meta.textContent = source + " • " + published;
             card.append(anchor, meta);
             fragment.append(card);
         });
 
-        if (!fragment.childNodes.length) {
-            throw new Error("No valid headlines");
-        }
+        if (!fragment.childNodes.length) throw new Error("No valid headlines");
 
         grid.replaceChildren(fragment);
-
         status.textContent =
-            "Last successful news refresh: " +
-            new Date().toLocaleString();
-
+            "Last successful news refresh: " + new Date().toLocaleString();
     } catch (error) {
-        status.textContent =
-            "News refresh unavailable" +
-            (
-                grid.children.length
-                ? " — previous headlines remain displayed."
-                : "."
-            ) +
+        status.textContent = "News refresh unavailable" +
+            (grid.children.length
+                ? " — previous headlines remain displayed." : ".") +
             " Open Google News for current coverage.";
 
         if (!grid.children.length) {
-            const anchor =
-                document.createElement("a");
-
-            anchor.href =
-                "https://news.google.com/home" +
-                "?hl=en-US&gl=US&ceid=US:en";
-
+            const anchor = document.createElement("a");
+            anchor.href = "https://news.google.com/home?hl=en-US&gl=US&ceid=US:en";
             anchor.textContent = "Open U.S. news";
             anchor.target = "_blank";
             anchor.rel = "noopener noreferrer";
-
             grid.replaceChildren(anchor);
         }
-
     } finally {
         newsBusy = false;
-        button.disabled = false;
     }
 }
 
-// Automatically fit the entire dashboard in one browser view.
+let risksBusy = false;
+
+async function nationalRisks() {
+    if (risksBusy) return;
+    risksBusy = true;
+
+    const status = document.getElementById("riskStatus");
+    const grid = document.getElementById("riskGrid");
+
+    try {
+        const data = await getJSON("https://api.weather.gov/alerts/active");
+        if (!Array.isArray(data.features)) throw new Error("Invalid alerts");
+
+        const rank = {
+            Extreme: 4, Severe: 3, Moderate: 2, Minor: 1, Unknown: 0
+        };
+
+        const alerts = data.features.map(item => item.properties)
+            .filter(p => p && p.status === "Actual" &&
+                (!p.ends || new Date(p.ends).getTime() > Date.now()))
+            .sort((a, b) =>
+                (rank[b.severity] || 0) - (rank[a.severity] || 0) ||
+                Number(b.urgency === "Immediate") -
+                    Number(a.urgency === "Immediate") ||
+                new Date(b.sent) - new Date(a.sent)
+            );
+
+        const fragment = document.createDocumentFragment();
+
+        alerts.slice(0, 6).forEach(alert => {
+            const card = document.createElement("article");
+            card.className = "risk-card";
+
+            const title = document.createElement("strong");
+            title.textContent = alert.event || "Weather alert";
+
+            const area = document.createElement("p");
+            area.textContent =
+                alert.areaDesc || "See official alert for affected areas.";
+            area.title = area.textContent;
+
+            const meta = document.createElement("div");
+            meta.className = "meta";
+            meta.textContent = (alert.severity || "Unknown severity") +
+                (alert.expires
+                    ? " • Until " + new Date(alert.expires).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit"
+                    })
+                    : "");
+
+            card.append(title, area, meta);
+            fragment.append(card);
+        });
+
+        grid.replaceChildren(fragment);
+        status.textContent = alerts.length
+            ? "Showing " + Math.min(6, alerts.length) + " of " +
+                alerts.length + " active alerts • Updated " +
+                new Date().toLocaleTimeString()
+            : "No active NWS alerts returned • Updated " +
+                new Date().toLocaleTimeString();
+    } catch (error) {
+        status.textContent = grid.children.length
+            ? "Update unavailable — previous alerts may be stale. Check NWS."
+            : "National alerts unavailable. Check NWS for current risks.";
+    } finally {
+        risksBusy = false;
+    }
+}
+
+// Automatically fit the dashboard in one browser view.
 const display = document.querySelector("main");
 let fitFrame = 0;
 
@@ -1013,37 +774,23 @@ function fitScreen() {
     cancelAnimationFrame(fitFrame);
 
     fitFrame = requestAnimationFrame(() => {
-        const availableWidth =
-            Math.max(1, window.innerWidth - 24);
-
-        const availableHeight =
-            Math.max(1, window.innerHeight - 24);
+        const availableWidth = Math.max(1, window.innerWidth - 24);
+        const availableHeight = Math.max(1, window.innerHeight - 24);
 
         display.style.transform = "none";
-
-        display.style.width =
-            Math.max(1280, availableWidth) + "px";
+        display.style.width = Math.max(1280, availableWidth) + "px";
 
         const naturalWidth = display.scrollWidth;
         const naturalHeight = display.scrollHeight;
-
         const scale = Math.min(
             1,
             availableWidth / naturalWidth,
             availableHeight / naturalHeight
         );
 
-        display.style.transform =
-            "scale(" + scale + ")";
-
+        display.style.transform = "scale(" + scale + ")";
         display.style.marginLeft =
-            Math.max(
-                0,
-                (
-                    availableWidth -
-                    naturalWidth * scale
-                ) / 2
-            ) + "px";
+            Math.max(0, (availableWidth - naturalWidth * scale) / 2) + "px";
     });
 }
 
@@ -1057,19 +804,16 @@ new MutationObserver(fitScreen).observe(display, {
 
 document.fonts.ready.then(fitScreen);
 
-document.getElementById(
-    "refreshNews"
-).addEventListener("click", news);
-
 fitScreen();
 clocks();
 weather();
 news();
+nationalRisks();
 
 setInterval(clocks, 1000);
 setInterval(weather, 300000);
 setInterval(news, 300000);
+setInterval(nationalRisks, 300000);
 </script>
-
 </body>
 </html>
