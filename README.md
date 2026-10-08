@@ -1,16 +1,275 @@
-## Hi there 👋
 
-<!--
-**tfitchue/tfitchue** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FedEx Freight Weather Dashboard</title>
 
-Here are some ideas to get you started:
+<style>
+body{
+    margin:0;
+    padding:20px;
+    background:#4D148C;
+    color:white;
+    font-family:Segoe UI,Arial,sans-serif;
+}
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+.header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.logo{
+    max-width:500px;
+    width:90%;
+}
+
+h1{
+    color:#FF6600;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:rgba(255,255,255,.1);
+    border-radius:20px;
+    padding:20px;
+    text-align:center;
+}
+
+.city{
+    font-size:28px;
+    font-weight:bold;
+}
+
+.time{
+    font-size:40px;
+    color:#FF6600;
+    margin:15px 0;
+}
+
+.icon{
+    font-size:80px;
+}
+
+.temp{
+    font-size:60px;
+    font-weight:bold;
+}
+
+.condition{
+    font-size:24px;
+    margin:10px 0;
+}
+
+.details{
+    font-size:18px;
+    line-height:1.8;
+}
+
+.updated{
+    text-align:center;
+    margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    logo.png
+    <h1>Weather & Time Dashboard</h1>
+</div>
+
+<div class="grid">
+
+<div class="card" id="harrison">
+    <div class="city">Harrison, AR</div>
+    <div class="time"></div>
+    <div class="icon"></div>
+    <div class="temp"></div>
+    <div class="condition"></div>
+    <div class="details"></div>
+</div>
+
+<div class="card" id="memphis">
+    <div class="city">Memphis, TN</div>
+    <div class="time"></div>
+    <div class="icon"></div>
+    <div class="temp"></div>
+    <div class="condition"></div>
+    <div class="details"></div>
+</div>
+
+<div class="card" id="newyork">
+    <div class="city">New York, NY</div>
+    <div class="time"></div>
+    <div class="icon"></div>
+    <div class="temp"></div>
+    <div class="condition"></div>
+    <div class="details"></div>
+</div>
+
+<div class="card" id="losangeles">
+    <div class="city">Los Angeles, CA</div>
+    <div class="time"></div>
+    <div class="icon"></div>
+    <div class="temp"></div>
+    <div class="condition"></div>
+    <div class="details"></div>
+</div>
+
+</div>
+
+<div class="updated" id="updated"></div>
+
+<script>
+
+const cities = [
+{
+id:"harrison",
+lat:36.2298,
+lon:-93.1077,
+tz:"America/Chicago"
+},
+{
+id:"memphis",
+lat:35.1495,
+lon:-90.0490,
+tz:"America/Chicago"
+},
+{
+id:"newyork",
+lat:40.7128,
+lon:-74.0060,
+tz:"America/New_York"
+},
+{
+id:"losangeles",
+lat:34.0522,
+lon:-118.2437,
+tz:"America/Los_Angeles"
+}
+];
+
+function weatherData(code){
+
+const codes = {
+0:["☀️","Clear"],
+1:["🌤️","Mostly Clear"],
+2:["⛅","Partly Cloudy"],
+3:["☁️","Overcast"],
+45:["🌫️","Fog"],
+48:["🌫️","Fog"],
+51:["🌦️","Drizzle"],
+53:["🌦️","Drizzle"],
+55:["🌧️","Heavy Drizzle"],
+61:["🌦️","Light Rain"],
+63:["🌧️","Rain"],
+65:["🌧️","Heavy Rain"],
+71:["🌨️","Snow"],
+73:["❄️","Snow"],
+75:["❄️","Heavy Snow"],
+80:["🌦️","Rain Showers"],
+81:["🌧️","Heavy Showers"],
+82:["⛈️","Storm"],
+95:["⛈️","Thunderstorm"],
+96:["⛈️","Thunderstorm"],
+99:["⛈️","Severe Storm"]
+};
+
+return codes[code] || ["❓","Unknown"];
+
+}
+
+async function updateWeather(){
+
+for(const city of cities){
+
+try{
+
+const response = await fetch(
+`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph`
+);
+
+const data = await response.json();
+
+const weatherCode =
+data.current_weather.weathercode;
+
+const weather =
+weatherData(weatherCode);
+
+const card =
+document.getElementById(city.id);
+
+card.querySelector(".icon").textContent =
+weather[0];
+
+card.querySelector(".condition").textContent =
+weather[1];
+
+card.querySelector(".temp").textContent =
+Math.round(data.current_weather.temperature)
++ "°F";
+
+card.querySelector(".details").innerHTML =
+`🌬️ Wind: ${Math.round(data.current_weather.windspeed)} MPH`;
+
+}
+catch(error){
+
+console.log(error);
+
+const card =
+document.getElementById(city.id);
+
+card.querySelector(".icon").textContent = "⚠️";
+card.querySelector(".condition").textContent =
+"Connection Error";
+card.querySelector(".temp").textContent = "--";
+
+}
+
+}
+
+document.getElementById("updated").textContent =
+"Updated: " + new Date().toLocaleString();
+
+}
+
+function updateClocks(){
+
+cities.forEach(city=>{
+
+const time =
+new Date().toLocaleTimeString("en-US",{
+timeZone:city.tz,
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit"
+});
+
+document
+.getElementById(city.id)
+.querySelector(".time")
+.textContent = time;
+
+});
+
+}
+
+updateWeather();
+updateClocks();
+
+setInterval(updateWeather,20000);
+setInterval(updateClocks,1000);
+
+</script>
+
+</body>
+</html>
