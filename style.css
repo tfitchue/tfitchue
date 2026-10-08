@@ -1,69 +1,12 @@
 body{
     margin:0;
     padding:20px;
-    background:#063fbc;
+    background:
+        linear-gradient(rgba(6,63,188,.95), rgba(6,63,188,.95)),
+        url('logo.png');
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:70%;
     color:white;
     font-family:Segoe UI,Arial,sans-serif;
 }
-
-.header{
-    text-align:center;
-    margin-bottom:20px;
-}
-
-.logo{
-    width:700px;
-    max-width:95%;
-    height:auto;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:#0050d7;
-    border:2px solid rgba(255,255,255,.2);
-    border-radius:20px;
-    padding:20px;
-    text-align:center;
-}
-
-.city{
-    font-size:28px;
-    font-weight:bold;
-}
-
-.time{
-    font-size:40px;
-    color:#FF6600;
-    margin:15px 0;
-}
-
-.icon{
-    font-size:80px;
-}
-
-.temp{
-    font-size:60px;
-    font-weight:bold;
-}
-
-.condition{
-    font-size:24px;
-    margin:10px 0;
-}
-
-.details{
-    font-size:18px;
-    line-height:1.8;
-}
-
-.updated{
-    text-align:center;
-    margin-top:20px;
-    font-size:18px;
-}
-``
