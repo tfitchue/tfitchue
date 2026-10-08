@@ -1,22 +1,38 @@
 body{
     margin:0;
     padding:20px;
-    background:#4D148C;
+    background:#063fbc;
     color:white;
     font-family:Segoe UI, Arial, sans-serif;
+    position:relative;
+    min-height:100vh;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:url('logo.png') center center no-repeat;
+    background-size:80%;
+    opacity:0.10;
+    z-index:-1;
+    pointer-events:none;
 }
 
 .header{
     text-align:center;
-    margin-bottom:40px;
+    margin-bottom:30px;
 }
 
 .logo{
-    width:300px;
-    max-width:95%;
-    height:auto;
-    display:block;
-    margin:0 auto;
+    display:none;
+}
+
+h1{
+    color:#FF6600;
 }
 
 .grid{
@@ -26,10 +42,12 @@ body{
 }
 
 .card{
-    background:rgba(255,255,255,.1);
+    background:rgba(0,0,0,.35);
+    backdrop-filter:blur(6px);
     border-radius:20px;
     padding:20px;
     text-align:center;
+    border:1px solid rgba(255,255,255,.15);
 }
 
 .city{
@@ -65,4 +83,5 @@ body{
 .updated{
     text-align:center;
     margin-top:20px;
+    font-size:18px;
 }
