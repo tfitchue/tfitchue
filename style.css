@@ -10,3 +10,19 @@ body{
     color:white;
     font-family:Segoe UI,Arial,sans-serif;
 }
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url("logo.png") center center / cover no-repeat;
+    opacity: 1;
+    pointer-events: none;
+    z-index: 0;
+}
+
+main {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    transform-origin: top left;
+}
