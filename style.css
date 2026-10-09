@@ -26,3 +26,185 @@ main {
     width: 100%;
     transform-origin: top left;
 }
+/* Fill the entire browser page */
+body {
+    padding: 10px;
+}
+
+main {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 10px;
+    min-width: 0;
+    min-height: 0;
+}
+
+.weather-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    min-width: 0;
+    min-height: 0;
+    gap: 10px;
+}
+
+.card {
+    min-width: 0;
+    min-height: 0;
+    padding: clamp(8px, 1vh, 16px);
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.city {
+    font-size: clamp(15px, 1.6vw, 32px);
+}
+
+.zone {
+    font-size: clamp(10px, .8vw, 15px);
+}
+
+.time {
+    margin: 6px 0;
+    font-size: clamp(16px, 1.8vw, 36px);
+}
+
+.icon {
+    font-size: clamp(28px, 4vh, 54px);
+}
+
+.temp {
+    font-size: clamp(32px, 5vh, 64px);
+}
+
+.condition {
+    min-height: 0;
+    font-size: clamp(13px, 1.1vw, 22px);
+}
+
+.feels {
+    font-size: clamp(11px, .9vw, 18px);
+}
+
+.section {
+    margin-top: auto;
+    padding-top: 8px;
+    font-size: clamp(10px, .75vw, 15px);
+}
+
+.current {
+    flex: 0 0 auto;
+}
+
+.row {
+    padding: clamp(3px, .55vh, 8px) 0;
+    font-size: clamp(11px, .95vw, 19px);
+}
+
+.awareness-grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    min-width: 0;
+    min-height: 0;
+    margin-top: 0;
+    gap: 10px;
+}
+
+.panel {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(8px, 1vh, 16px);
+    overflow: hidden;
+}
+
+.panel-heading {
+    flex: 0 0 auto;
+    margin-bottom: 6px;
+}
+
+.panel-heading h2 {
+    font-size: clamp(16px, 1.5vw, 30px);
+}
+
+.badge {
+    font-size: clamp(11px, 1vw, 20px);
+}
+
+.status {
+    flex: 0 0 auto;
+    font-size: clamp(11px, .85vw, 17px);
+}
+
+.news-grid,
+.risk-grid {
+    flex: 1;
+    min-height: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(min-content, 1fr);
+    align-content: stretch;
+    overflow: auto;
+    gap: 8px;
+}
+
+.headline,
+.risk-card {
+    padding: clamp(8px, 1vh, 14px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.headline a {
+    font-size: clamp(14px, 1.2vw, 24px);
+    line-height: 1.3;
+}
+
+.risk-card strong {
+    font-size: clamp(13px, 1.1vw, 22px);
+}
+
+.risk-card p {
+    font-size: clamp(11px, .9vw, 18px);
+}
+
+.meta {
+    font-size: clamp(10px, .8vw, 16px);
+}
+
+.note {
+    flex: 0 0 auto;
+    margin-top: 6px;
+    font-size: clamp(9px, .7vw, 13px);
+}
+
+.footer {
+    margin: 0;
+    padding: 0;
+    font-size: clamp(9px, .7vw, 13px);
+    line-height: 1.3;
+}
+
+/* Keep short browser windows usable */
+@media (max-height: 700px) {
+    main {
+        grid-template-rows: minmax(0, 1.15fr) minmax(0, 1fr) auto;
+    }
+
+    .icon {
+        font-size: 26px;
+    }
+
+    .temp {
+        font-size: 34px;
+    }
+
+    .time {
+        margin: 3px 0;
+    }
+
+    .row {
+        padding: 3px 0;
+    }
+}
