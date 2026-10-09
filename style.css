@@ -12,7 +12,7 @@ body {
     background-color: #063fbc;
     background-image: url("./logo.png");
     background-position: center;
-    background-size: cover;
+    background-size: 85%;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
@@ -42,13 +42,13 @@ main {
 }
 
 .card {
-    background: rgba(2,16,43,.35);
-    border: 1px solid rgba(255,255,255,.15);
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255,255,255,0.08);
     border-top: 6px solid #ff6600;
     border-radius: 16px;
 
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 
     min-width: 0;
     min-height: 0;
@@ -58,17 +58,19 @@ main {
     flex-direction: column;
     overflow: auto;
 
-    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
 }
 
 .city {
     font-size: clamp(15px, 1.6vw, 32px);
     font-weight: 800;
+    text-shadow: 0 1px 3px rgba(0,0,0,.8);
 }
 
 .zone {
     font-size: clamp(10px, .8vw, 15px);
-    color: #bdd3f4;
+    color: #d6e4ff;
+    text-shadow: 0 1px 2px rgba(0,0,0,.8);
 }
 
 .time {
@@ -76,6 +78,7 @@ main {
     font-size: clamp(16px, 1.8vw, 36px);
     color: #ff8b3d;
     font-weight: 800;
+    text-shadow: 0 1px 4px rgba(0,0,0,.8);
 }
 
 .icon {
@@ -85,16 +88,19 @@ main {
 .temp {
     font-size: clamp(32px, 5vh, 64px);
     font-weight: 800;
+    text-shadow: 0 1px 4px rgba(0,0,0,.8);
 }
 
 .condition {
     min-height: 0;
     font-size: clamp(13px, 1.1vw, 22px);
+    text-shadow: 0 1px 3px rgba(0,0,0,.8);
 }
 
 .feels {
     font-size: clamp(11px, .9vw, 18px);
-    color: #c5d9fa;
+    color: #d6e4ff;
+    text-shadow: 0 1px 2px rgba(0,0,0,.8);
 }
 
 .highlow {
@@ -102,6 +108,7 @@ main {
     color: #ffb17c;
     font-weight: 700;
     margin-top: 6px;
+    text-shadow: 0 1px 3px rgba(0,0,0,.8);
 }
 
 .section {
@@ -109,43 +116,4 @@ main {
     padding-top: 8px;
     color: #ffb17c;
     font-size: clamp(10px, .75vw, 15px);
-    text-transform: uppercase;
-    border-bottom: 1px solid rgba(255,255,255,.20);
-}
-
-.current {
-    flex: 0 0 auto;
-}
-
-.row {
-    padding: clamp(3px, .55vh, 8px) 0;
-    font-size: clamp(11px, .95vw, 19px);
-    border-bottom: 1px solid rgba(255,255,255,.08);
-}
-
-.row span {
-    color: #bdd3f4;
-}
-
-#backgroundError {
-    display: none;
-}
-
-@media (max-height: 700px) {
-
-    .icon {
-        font-size: 26px;
-    }
-
-    .temp {
-        font-size: 34px;
-    }
-
-    .time {
-        margin: 3px 0;
-    }
-
-    .row {
-        padding: 3px 0;
-    }
-}
+    text
