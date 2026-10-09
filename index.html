@@ -1,9 +1,12 @@
+Save as **index.html**, with **logo.png** in the same folder.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FSOC Weather & USA News</title>
+<title>FSOC Weather & U.S. Headlines</title>
 
 <style>
 * {
@@ -19,7 +22,7 @@ body {
 }
 
 body {
-    padding: 12px;
+    padding: 8px;
     background: #063fbc;
     color: white;
     font-family: "Segoe UI", Arial, sans-serif;
@@ -43,10 +46,9 @@ body {
     z-index: 2;
     max-width: 400px;
     padding: 10px;
-    border-radius: 6px;
-    background: #8b1926;
-    color: white;
-    font-size: 13px;
+    background: #892330;
+    border-radius: 8px;
+    font-size: 14px;
 }
 
 main {
@@ -65,7 +67,7 @@ main {
 
 .card,
 .panel {
-    background: rgba(2, 16, 43, .82);
+    background: rgba(3, 15, 35, .97);
     border: 1px solid #ffffff30;
     border-radius: 12px;
     padding: 12px;
@@ -138,7 +140,7 @@ main {
     gap: 8px;
     padding: 5px 0;
     border-bottom: 1px solid #ffffff12;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .row span {
@@ -159,7 +161,7 @@ main {
 }
 
 .panel {
-    border-top: 4px solid #ed4c55;
+    border-top: 4px solid #6aa5ed;
 }
 
 .risks-panel {
@@ -172,16 +174,15 @@ main {
 
 .panel-heading h2 {
     margin: 0;
-    font-size: 22px;
+    font-size: 26px;
 }
 
 .badge {
     display: inline-block;
-    margin-right: 10px;
-    padding: 5px 9px;
+    padding: 6px 10px;
+    background: #244c7e;
     border-radius: 6px;
-    background: #c93240;
-    font-size: 15px;
+    font-size: 21px;
     letter-spacing: 1px;
 }
 
@@ -196,7 +197,7 @@ main {
 .headline,
 .risk-card {
     min-width: 0;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ffffff25;
     border-radius: 10px;
     background: #ffffff05;
@@ -208,9 +209,9 @@ main {
     -webkit-box-orient: vertical;
     overflow: hidden;
     color: white;
-    font-size: 18px;
+    font-size: 23px;
     font-weight: 650;
-    line-height: 1.25;
+    line-height: 1.3;
     text-decoration: none;
 }
 
@@ -223,10 +224,19 @@ main {
     background: #ffab4510;
 }
 
+.risk-card.urgent {
+    border-color: #ff6868;
+    background: #a3243428;
+}
+
 .risk-card strong {
     display: block;
     color: #ffbd73;
-    font-size: 17px;
+    font-size: 23px;
+}
+
+.risk-card.urgent strong {
+    color: #ff9999;
 }
 
 .risk-card p {
@@ -234,26 +244,52 @@ main {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    margin: 6px 0;
-    font-size: 13px;
+    margin: 7px 0;
+    font-size: 18px;
+    line-height: 1.35;
+}
+
+.operational {
+    margin-top: 8px;
+    color: #ffe0ab;
+    font-size: 17px;
     line-height: 1.35;
 }
 
 .meta {
     margin-top: 7px;
     color: #aac4ec;
-    font-size: 12px;
+    font-size: 15px;
 }
 
 .status {
     color: #bfd3f1;
-    font-size: 13px;
+    font-size: 17px;
+}
+
+.status.stale {
+    color: #ffb0b0;
+    font-weight: 700;
+}
+
+.freshness {
+    margin-top: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    background: #031023ed;
+    font-size: 19px;
+    font-weight: 650;
+}
+
+.freshness.stale {
+    background: #892330;
+    color: white;
 }
 
 .note,
 .footer {
     color: #abc5ed;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.5;
 }
 
@@ -263,7 +299,6 @@ main {
 
 .footer {
     margin-top: 8px;
-    padding: 4px;
     text-align: center;
     text-shadow: 0 1px 4px #000;
 }
@@ -279,30 +314,25 @@ a {
 
 <div id="backgroundError" role="status" hidden>
     Cannot load logo.png. Put it in the same folder as this HTML file.
-    Online previews require the image to be uploaded to the preview as well.
 </div>
 
 <main>
     <div id="weatherGrid" class="weather-grid"></div>
 
     <div class="awareness-grid">
-        <section class="panel" aria-label="United States breaking news">
+        <section class="panel" aria-label="U.S. headlines">
             <div class="panel-heading">
-                <h2>
-                    <span class="badge">BREAKING NEWS</span>
-                    United States
-                </h2>
+                <h2><span class="badge">U.S. HEADLINES</span></h2>
             </div>
 
             <div id="newsStatus" class="status" role="status">
-                Loading U.S. headlines…
+                Loading headlines…
             </div>
 
             <div id="newsGrid" class="news-grid"></div>
 
             <p class="note">
                 Latest U.S. headlines via Google News RSS.
-                Not all headlines are designated breaking by publishers.
                 Updates every 5 minutes.
             </p>
         </section>
@@ -319,8 +349,8 @@ a {
             <div id="riskGrid" class="risk-grid"></div>
 
             <p class="note">
-                National Weather Service • highest-severity active alerts shown
-                • updates every 5 minutes.
+                Alerts grouped by type, severity and issuing NWS office.
+                Potential impacts are general guidance; route closures are not verified.
                 <a href="https://www.weather.gov/"
                    target="_blank"
                    rel="noopener noreferrer">View all alerts</a>
@@ -328,32 +358,81 @@ a {
         </section>
     </div>
 
+    <div id="freshness" class="freshness" role="status">
+        Loading feeds…
+    </div>
+
     <div class="footer">
-        <div id="weatherStatus" role="status">Loading weather…</div>
         Weather:
         <a href="https://open-meteo.com/"
            target="_blank"
            rel="noopener noreferrer">Open-Meteo</a>
-        • modeled conditions • updates every 5 minutes
-        <br>
-        USA Weather Risks:
+        • modeled conditions
+        • Alerts:
         <a href="https://www.weather.gov/"
            target="_blank"
            rel="noopener noreferrer">National Weather Service</a>
+        • Updates every 5 minutes
     </div>
 </main>
 
 <script>
 "use strict";
 
+const REFRESH_INTERVAL = 300000;
+
+const WEATHER_ENDPOINT =
+    "https://api.open-meteo.com/v1/forecast";
+
+const ALERT_ENDPOINT =
+    "https://api.weather.gov/alerts/active";
+
+const NEWS_FEED =
+    "https://news.google.com/rss/headlines/section/topic/NATION" +
+    "?hl=en-US&gl=US&ceid=US:en";
+
+const feedState = {
+    weather: { time: null, stale: false },
+    news: { time: null, stale: false },
+    alerts: { time: null, stale: false }
+};
+
+function updateFreshness() {
+    const entries = Object.entries(feedState);
+    const stale = entries
+        .filter(([, value]) => value.stale)
+        .map(([key]) => key);
+
+    const times = entries
+        .map(([, value]) => value.time)
+        .filter(value => value !== null);
+
+    const pending = entries
+        .filter(([, value]) => !value.time && !value.stale)
+        .map(([key]) => key);
+
+    const element = document.getElementById("freshness");
+    element.classList.toggle("stale", stale.length > 0);
+
+    element.textContent =
+        (times.length
+            ? "Updated " +
+                new Date(Math.min(...times)).toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "2-digit"
+                }) +
+                " • oldest successful feed update"
+            : "Waiting for feed data") +
+        (pending.length
+            ? " • Loading: " + pending.join(", ")
+            : "") +
+        (stale.length
+            ? " • STALE / UNAVAILABLE: " + stale.join(", ")
+            : "");
+}
+
 const background = document.getElementById("pageBackground");
 const backgroundError = document.getElementById("backgroundError");
-
-function checkBackground() {
-    if (background.complete) {
-        backgroundError.hidden = background.naturalWidth > 0;
-    }
-}
 
 background.addEventListener("load", () => {
     backgroundError.hidden = true;
@@ -363,15 +442,9 @@ background.addEventListener("error", () => {
     backgroundError.hidden = false;
 });
 
-checkBackground();
-
-const REFRESH_INTERVAL = 300000;
-const WEATHER_ENDPOINT = "https://api.open-meteo.com/v1/forecast";
-const ALERT_ENDPOINT = "https://api.weather.gov/alerts/active";
-
-const NEWS_FEED =
-    "https://news.google.com/rss/headlines/section/topic/NATION" +
-    "?hl=en-US&gl=US&ceid=US:en";
+if (background.complete) {
+    backgroundError.hidden = background.naturalWidth > 0;
+}
 
 const cities = [
     {
@@ -607,16 +680,22 @@ async function updateWeather() {
                 successful++;
             } catch {
                 q(".condition").textContent = card.dataset.loaded
-                    ? "Update failed — showing previous weather"
-                    : "Data unavailable";
+                    ? "STALE — previous weather"
+                    : "Weather unavailable";
             }
         }));
 
-        document.getElementById("weatherStatus").textContent =
-            successful + "/5 cities updated • " +
-            new Date().toLocaleString();
+        if (successful === cities.length) {
+            feedState.weather = {
+                time: Date.now(),
+                stale: false
+            };
+        } else {
+            feedState.weather.stale = true;
+        }
     } finally {
         weatherBusy = false;
+        updateFreshness();
     }
 }
 
@@ -629,7 +708,7 @@ async function updateNews() {
     const status = document.getElementById("newsStatus");
     const grid = document.getElementById("newsGrid");
 
-    status.textContent = "Updating U.S. headlines…";
+    status.textContent = "Updating headlines…";
 
     try {
         const url = new URL("https://api.rss2json.com/v1/api.json");
@@ -720,18 +799,26 @@ async function updateNews() {
         grid.replaceChildren(fragment);
         grid.dataset.loaded = "true";
 
-        status.textContent =
-            "Last news update: " + new Date().toLocaleString();
+        status.textContent = "Latest U.S. headlines";
+        status.classList.remove("stale");
+
+        feedState.news = {
+            time: Date.now(),
+            stale: false
+        };
     } catch {
+        feedState.news.stale = true;
+        status.classList.add("stale");
+
         status.textContent = grid.dataset.loaded
-            ? "Update unavailable — previous headlines may be stale."
-            : "News unavailable. Open Google News for current coverage.";
+            ? "STALE — previous headlines displayed."
+            : "Headlines unavailable. Check Google News.";
 
         if (!grid.dataset.loaded) {
             const anchor = document.createElement("a");
             anchor.href =
                 "https://news.google.com/home?hl=en-US&gl=US&ceid=US:en";
-            anchor.textContent = "Open U.S. news";
+            anchor.textContent = "Open U.S. headlines";
             anchor.target = "_blank";
             anchor.rel = "noopener noreferrer";
 
@@ -739,7 +826,36 @@ async function updateNews() {
         }
     } finally {
         newsBusy = false;
+        updateFreshness();
     }
+}
+
+function operationalImpact(event) {
+    if (/hurricane|tropical storm|wind|tornado/i.test(event)) {
+        return "Potential crosswind hazards and disruption to high-profile vehicles.";
+    }
+
+    if (/flood/i.test(event)) {
+        return "Potential road flooding, access restrictions and detours.";
+    }
+
+    if (/fog|dust|smoke/i.test(event)) {
+        return "Potential reduced visibility and slower travel.";
+    }
+
+    if (/snow|ice|blizzard|winter|freez/i.test(event)) {
+        return "Potential slick roads and slower freight movement.";
+    }
+
+    if (/thunderstorm/i.test(event)) {
+        return "Potential gusts, hail and heavy rain.";
+    }
+
+    if (/heat/i.test(event)) {
+        return "Potential heat exposure during outdoor work.";
+    }
+
+    return "Review official alert details for local operational effects.";
 }
 
 let risksBusy = false;
@@ -758,7 +874,7 @@ async function updateNationalRisks() {
             throw new Error("Invalid alert data");
         }
 
-        const severityRank = {
+        const rank = {
             Extreme: 4,
             Severe: 3,
             Moderate: 2,
@@ -766,74 +882,153 @@ async function updateNationalRisks() {
             Unknown: 0
         };
 
+        const groups = new Map();
         const now = Date.now();
 
-        const alerts = data.features
-            .map(item => item.properties)
-            .filter(alert =>
-                alert &&
-                alert.status === "Actual" &&
-                (!alert.ends || new Date(alert.ends).getTime() > now) &&
-                (!alert.expires || new Date(alert.expires).getTime() > now)
-            )
-            .sort((a, b) =>
-                (severityRank[b.severity] || 0) -
-                    (severityRank[a.severity] || 0) ||
-                Number(b.urgency === "Immediate") -
-                    Number(a.urgency === "Immediate") ||
-                new Date(b.sent) - new Date(a.sent)
-            );
+        for (const feature of data.features) {
+            const alert = feature.properties;
+
+            if (
+                !alert ||
+                alert.status !== "Actual" ||
+                (alert.ends && Date.parse(alert.ends) <= now) ||
+                (alert.expires && Date.parse(alert.expires) <= now)
+            ) {
+                continue;
+            }
+
+            const key = [
+                alert.event,
+                alert.severity,
+                alert.senderName
+            ].join("|");
+
+            if (!groups.has(key)) {
+                groups.set(key, {
+                    event: alert.event,
+                    severity: alert.severity,
+                    office: alert.senderName,
+                    areas: new Set(),
+                    expirations: [],
+                    count: 0,
+                    immediate: false
+                });
+            }
+
+            const group = groups.get(key);
+            group.count++;
+
+            if (alert.urgency === "Immediate") {
+                group.immediate = true;
+            }
+
+            (alert.areaDesc || "").split(";").forEach(area => {
+                if (area.trim()) {
+                    group.areas.add(area.trim());
+                }
+            });
+
+            if (
+                alert.expires &&
+                Number.isFinite(Date.parse(alert.expires))
+            ) {
+                group.expirations.push(Date.parse(alert.expires));
+            }
+        }
+
+        const all = [...groups.values()].sort((a, b) =>
+            (rank[b.severity] || 0) - (rank[a.severity] || 0) ||
+            Number(b.immediate) - Number(a.immediate)
+        );
 
         const fragment = document.createDocumentFragment();
 
-        alerts.slice(0, 6).forEach(alert => {
+        const formatDate = time =>
+            new Date(time).toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+            });
+
+        for (const group of all.slice(0, 6)) {
             const card = document.createElement("article");
             card.className = "risk-card";
 
+            if (
+                group.severity === "Extreme" ||
+                (group.severity === "Severe" && group.immediate)
+            ) {
+                card.classList.add("urgent");
+            }
+
             const title = document.createElement("strong");
-            title.textContent = alert.event || "Weather alert";
+            title.textContent = group.event || "Weather alert";
 
             const area = document.createElement("p");
-            area.textContent =
-                alert.areaDesc || "Check NWS for affected areas.";
+            area.textContent = [...group.areas].join("; ") ||
+                "See official alert for affected areas.";
             area.title = area.textContent;
+
+            const impact = document.createElement("div");
+            impact.className = "operational";
+            impact.textContent = operationalImpact(group.event || "");
 
             const meta = document.createElement("div");
             meta.className = "meta";
 
-            const expiration = alert.expires
-                ? " • Until " +
-                    new Date(alert.expires).toLocaleString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit"
-                    })
-                : "";
+            let expiration = "";
+
+            if (group.expirations.length) {
+                const earliest = Math.min(...group.expirations);
+                const latest = Math.max(...group.expirations);
+
+                expiration = " • Expires " + formatDate(earliest);
+
+                if (earliest !== latest) {
+                    expiration += " – " + formatDate(latest);
+                }
+            }
 
             meta.textContent =
-                (alert.severity || "Unknown severity") + expiration;
+                (group.severity || "Unknown severity") +
+                " • " + group.count +
+                " alert" + (group.count === 1 ? "" : "s") +
+                expiration;
 
-            card.append(title, area, meta);
+            const office = document.createElement("div");
+            office.className = "meta";
+            office.textContent =
+                group.office || "National Weather Service";
+
+            card.append(title, area, impact, meta, office);
             fragment.append(card);
-        });
+        }
 
         grid.replaceChildren(fragment);
         grid.dataset.loaded = "true";
 
-        status.textContent = alerts.length
-            ? "Showing " + Math.min(6, alerts.length) +
-                " of " + alerts.length +
-                " active alerts • Updated " +
-                new Date().toLocaleTimeString()
-            : "No active NWS alerts returned • Updated " +
-                new Date().toLocaleTimeString();
+        status.textContent = all.length
+            ? "Showing " + Math.min(6, all.length) +
+                " of " + all.length + " alert groups"
+            : "No active NWS alerts returned";
+
+        status.classList.remove("stale");
+
+        feedState.alerts = {
+            time: Date.now(),
+            stale: false
+        };
     } catch {
+        feedState.alerts.stale = true;
+        status.classList.add("stale");
+
         status.textContent = grid.dataset.loaded
-            ? "Update unavailable — previous alert information may be stale. Check NWS."
-            : "National alerts unavailable. Check NWS for current risks.";
+            ? "STALE — previous alerts displayed. Check NWS."
+            : "Alerts unavailable. Check NWS.";
     } finally {
         risksBusy = false;
+        updateFreshness();
     }
 }
 
@@ -844,8 +1039,8 @@ function fitScreen() {
     cancelAnimationFrame(fitFrame);
 
     fitFrame = requestAnimationFrame(() => {
-        const availableWidth = Math.max(1, window.innerWidth - 24);
-        const availableHeight = Math.max(1, window.innerHeight - 24);
+        const availableWidth = Math.max(1, window.innerWidth - 16);
+        const availableHeight = Math.max(1, window.innerHeight - 16);
 
         display.style.transform = "none";
         display.style.width = Math.max(1280, availableWidth) + "px";
@@ -888,3 +1083,4 @@ setInterval(updateNationalRisks, REFRESH_INTERVAL);
 </script>
 </body>
 </html>
+```
