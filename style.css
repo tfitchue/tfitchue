@@ -4,7 +4,7 @@ html {
 
 body {
     margin: 0;
-    padding: 20px;
+    padding: 10px;
     min-height: 100vh;
     color: white;
     font-family: "Segoe UI", Arial, sans-serif;
@@ -24,50 +24,58 @@ body::before {
 main {
     position: relative;
     width: 100%;
-    transform-origin: top left;
-}
-/* Fill the entire browser page */
-body {
-    padding: 10px;
-}
-
-main {
-    width: 100%;
     height: 100%;
     display: grid;
-    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto;
     gap: 10px;
     min-width: 0;
     min-height: 0;
 }
 
 .weather-grid {
+    display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    height: calc(100vh - 20px);
     min-width: 0;
     min-height: 0;
-    gap: 10px;
 }
 
 .card {
+    background: rgba(2,16,43,.35);
+    border: 1px solid rgba(255,255,255,.15);
+    border-top: 6px solid #ff6600;
+    border-radius: 16px;
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
     min-width: 0;
     min-height: 0;
     padding: clamp(8px, 1vh, 16px);
+
     display: flex;
     flex-direction: column;
     overflow: auto;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
 }
 
 .city {
     font-size: clamp(15px, 1.6vw, 32px);
+    font-weight: 800;
 }
 
 .zone {
     font-size: clamp(10px, .8vw, 15px);
+    color: #bdd3f4;
 }
 
 .time {
     margin: 6px 0;
     font-size: clamp(16px, 1.8vw, 36px);
+    color: #ff8b3d;
+    font-weight: 800;
 }
 
 .icon {
@@ -76,6 +84,7 @@ main {
 
 .temp {
     font-size: clamp(32px, 5vh, 64px);
+    font-weight: 800;
 }
 
 .condition {
@@ -85,12 +94,23 @@ main {
 
 .feels {
     font-size: clamp(11px, .9vw, 18px);
+    color: #c5d9fa;
+}
+
+.highlow {
+    font-size: clamp(12px, 1vw, 20px);
+    color: #ffb17c;
+    font-weight: 700;
+    margin-top: 6px;
 }
 
 .section {
     margin-top: auto;
     padding-top: 8px;
+    color: #ffb17c;
     font-size: clamp(10px, .75vw, 15px);
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,.20);
 }
 
 .current {
@@ -100,97 +120,18 @@ main {
 .row {
     padding: clamp(3px, .55vh, 8px) 0;
     font-size: clamp(11px, .95vw, 19px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
-.awareness-grid {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-    min-width: 0;
-    min-height: 0;
-    margin-top: 0;
-    gap: 10px;
+.row span {
+    color: #bdd3f4;
 }
 
-.panel {
-    min-width: 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    padding: clamp(8px, 1vh, 16px);
-    overflow: hidden;
+#backgroundError {
+    display: none;
 }
 
-.panel-heading {
-    flex: 0 0 auto;
-    margin-bottom: 6px;
-}
-
-.panel-heading h2 {
-    font-size: clamp(16px, 1.5vw, 30px);
-}
-
-.badge {
-    font-size: clamp(11px, 1vw, 20px);
-}
-
-.status {
-    flex: 0 0 auto;
-    font-size: clamp(11px, .85vw, 17px);
-}
-
-.news-grid,
-.risk-grid {
-    flex: 1;
-    min-height: 0;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: minmax(min-content, 1fr);
-    align-content: stretch;
-    overflow: auto;
-    gap: 8px;
-}
-
-.headline,
-.risk-card {
-    padding: clamp(8px, 1vh, 14px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.headline a {
-    font-size: clamp(14px, 1.2vw, 24px);
-    line-height: 1.3;
-}
-
-.risk-card strong {
-    font-size: clamp(13px, 1.1vw, 22px);
-}
-
-.risk-card p {
-    font-size: clamp(11px, .9vw, 18px);
-}
-
-.meta {
-    font-size: clamp(10px, .8vw, 16px);
-}
-
-.note {
-    flex: 0 0 auto;
-    margin-top: 6px;
-    font-size: clamp(9px, .7vw, 13px);
-}
-
-.footer {
-    margin: 0;
-    padding: 0;
-    font-size: clamp(9px, .7vw, 13px);
-    line-height: 1.3;
-}
-
-/* Keep short browser windows usable */
 @media (max-height: 700px) {
-    main {
-        grid-template-rows: minmax(0, 1.15fr) minmax(0, 1fr) auto;
-    }
 
     .icon {
         font-size: 26px;
