@@ -491,6 +491,15 @@ function updateClocks() {
     });
 }
 
+function fitScreen() {
+    cancelAnimationFrame(fitFrame);
+
+    fitFrame = requestAnimationFrame(() => {
+        display.style.removeProperty("transform");
+        display.style.removeProperty("width");
+        display.style.removeProperty("margin-left");
+    });
+}
 async function getJSON(url) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 20000);
