@@ -9,12 +9,7 @@ body {
     color: white;
     font-family: "Segoe UI", Arial, sans-serif;
 
-    background-color: transparent;
-    background-image: url("./logo.png");
-    background-position: center;
-    background-size: 85%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background: #000 url("./logo.png") center center / contain no-repeat fixed;
 }
 
 body::before {
@@ -42,13 +37,10 @@ main {
 }
 
 .card {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.20);
     border-top: 6px solid #ff6600;
     border-radius: 16px;
-
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
 
     min-width: 0;
     min-height: 0;
@@ -57,20 +49,18 @@ main {
     display: flex;
     flex-direction: column;
     overflow: auto;
-
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .city {
     font-size: clamp(15px, 1.6vw, 32px);
     font-weight: 800;
-    text-shadow: 0 2px 4px rgba(0,0,0,.9);
+    text-shadow: 0 0 8px rgba(0,0,0,.9);
 }
 
 .zone {
     font-size: clamp(10px, .8vw, 15px);
     color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0,0,0,.9);
+    text-shadow: 0 0 8px rgba(0,0,0,.9);
 }
 
 .time {
@@ -78,7 +68,7 @@ main {
     font-size: clamp(16px, 1.8vw, 36px);
     color: #ff8b3d;
     font-weight: 800;
-    text-shadow: 0 2px 4px rgba(0,0,0,.9);
+    text-shadow: 0 0 8px rgba(0,0,0,.9);
 }
 
 .icon {
@@ -88,14 +78,72 @@ main {
 .temp {
     font-size: clamp(32px, 5vh, 64px);
     font-weight: 800;
-    text-shadow: 0 2px 4px rgba(0,0,0,.9);
+    text-shadow: 0 0 8px rgba(0,0,0,.9);
 }
 
 .condition {
     min-height: 0;
     font-size: clamp(13px, 1.1vw, 22px);
-    text-shadow: 0 2px 4px rgba(0,0,0,.9);
+    text-shadow: 0 0 8px rgba(0,0,0,.9);
 }
 
 .feels {
-    font-size
+    font-size: clamp(11px, .9vw, 18px);
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(0,0,0,.9);
+}
+
+.highlow {
+    font-size: clamp(12px, 1vw, 20px);
+    color: #ffb17c;
+    font-weight: 700;
+    margin-top: 6px;
+    text-shadow: 0 0 8px rgba(0,0,0,.9);
+}
+
+.section {
+    margin-top: auto;
+    padding-top: 8px;
+    color: #ffb17c;
+    font-size: clamp(10px, .75vw, 15px);
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,.20);
+    text-shadow: 0 0 8px rgba(0,0,0,.9);
+}
+
+.current {
+    flex: 0 0 auto;
+}
+
+.row {
+    padding: clamp(3px, .55vh, 8px) 0;
+    font-size: clamp(11px, .95vw, 19px);
+    border-bottom: 1px solid rgba(255,255,255,.10);
+    text-shadow: 0 0 8px rgba(0,0,0,.9);
+}
+
+.row span {
+    color: #ffffff;
+}
+
+#backgroundError {
+    display: none;
+}
+
+@media (max-height: 700px) {
+    .icon {
+        font-size: 26px;
+    }
+
+    .temp {
+        font-size: 34px;
+    }
+
+    .time {
+        margin: 3px 0;
+    }
+
+    .row {
+        padding: 3px 0;
+    }
+}
