@@ -85,6 +85,7 @@ main{
     font-size:1.2rem;
     font-weight:700;
     letter-spacing:1px;
+    text-shadow:0 0 8px rgba(0,0,0,.8);
 }
 
 .time{
@@ -93,6 +94,7 @@ main{
     font-size:3.8rem;
     font-weight:800;
     font-variant-numeric:tabular-nums;
+    text-shadow:0 0 15px rgba(0,0,0,.8);
 }
 
 .icon{
@@ -104,16 +106,18 @@ main{
     font-size:6rem;
     font-weight:900;
     margin-top:10px;
+    text-shadow:0 0 20px rgba(0,0,0,.9);
 }
 
 .condition{
     font-size:1.8rem;
     font-weight:700;
     margin-top:10px;
+    text-shadow:0 0 10px rgba(0,0,0,.8);
 }
 
 .feels{
-    color:#fff;
+    color:#ffffff;
     font-size:1.2rem;
     font-weight:600;
     margin-top:5px;
@@ -190,7 +194,7 @@ main{
 
 <body>
 
-<img id="pageBackground" src="logo.png" alt="Background Logo">
+<img id="pageBackground" src="logo.png" alt="FedEx Freight Logo Background">
 
 <div id="backgroundError" hidden>
 Unable to load logo.png
@@ -203,8 +207,7 @@ Unable to load logo.png
 <script>
 "use strict";
 
-const WEATHER_ENDPOINT =
-    "https://api.open-meteo.com/v1/forecast";
+const WEATHER_ENDPOINT = "https://api.open-meteo.com/v1/forecast";
 
 const cities = [
 {
@@ -306,65 +309,23 @@ cities.map(city => `
 </article>
 `).join("");
 
-let onlineTimeOffset = 0;
-
-async function syncOnlineTime(){
-
-    try{
-
-        const response = await fetch(
-            "https://worldtimeapi.org/api/timezone/Etc/UTC",
-            {cache:"no-store"}
-        );
-
-        const data = await response.json();
-
-        const serverTime =
-            new Date(data.utc_datetime).getTime();
-
-        onlineTimeOffset =
-            serverTime - Date.now();
-
-    }catch(error){
-
-        console.error(
-            "Internet time sync failed:",
-            error
-        );
-
-    }
-}
-
 function updateClocks(){
 
-    const syncedNow =
-        new Date(Date.now() + onlineTimeOffset);
-
-    cities.forEach(city => {
-
-        document.querySelector(
-            `#${city.id} .time`
-        ).textContent =
-            syncedNow.toLocaleTimeString(
-                "en-US",
-                {
-                    timeZone:city.tz,
-                    hour:"2-digit",
-                    minute:"2-digit",
-                    second:"2-digit"
-                }
-            );
-
+    cities.forEach(city=>{
+        document.querySelector(`#${city.id} .time`).textContent =
+            new Date().toLocaleTimeString("en-US",{
+                timeZone:city.tz,
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit"
+            });
     });
 
-    const delay =
-        1000 - (Date.now() % 1000);
-
+    const delay = 1000 - (Date.now() % 1000);
     setTimeout(updateClocks, delay);
 }
 
 async function getJSON(url){
-
     const response = await fetch(url);
 
     if(!response.ok){
@@ -377,43 +338,37 @@ async function getJSON(url){
 async function updateWeather(){
 
     await Promise.all(
+        cities.map(async city=>{
 
-        cities.map(async city => {
-
-            const card =
-                document.getElementById(city.id);
+            const card = document.getElementById(city.id);
 
             try{
 
-                const url =
-                    new URL(WEATHER_ENDPOINT);
+                const url = new URL(WEATHER_ENDPOINT);
 
-                url.search =
-                    new URLSearchParams({
-                        latitude:city.lat,
-                        longitude:city.lon,
+                url.search = new URLSearchParams({
+                    latitude:city.lat,
+                    longitude:city.lon,
+                    current:[
+                        "temperature_2m",
+                        "relative_humidity_2m",
+                        "apparent_temperature",
+                        "weather_code",
+                        "wind_speed_10m",
+                        "wind_gusts_10m"
+                    ].join(","),
 
-                        current:[
-                            "temperature_2m",
-                            "relative_humidity_2m",
-                            "apparent_temperature",
-                            "weather_code",
-                            "wind_speed_10m",
-                            "wind_gusts_10m"
-                        ].join(","),
+                    daily:[
+                        "temperature_2m_max",
+                        "temperature_2m_min"
+                    ].join(","),
 
-                        daily:[
-                            "temperature_2m_max",
-                            "temperature_2m_min"
-                        ].join(","),
+                    temperature_unit:"fahrenheit",
+                    wind_speed_unit:"mph",
+                    timezone:city.tz
+                });
 
-                        temperature_unit:"fahrenheit",
-                        wind_speed_unit:"mph",
-                        timezone:city.tz
-                    });
-
-                const data =
-                    await getJSON(url);
+                const data = await getJSON(url);
 
                 const c = data.current;
                 const d = data.daily;
@@ -422,11 +377,8 @@ async function updateWeather(){
                     weatherCodes[c.weather_code] ||
                     ["❓","Unknown"];
 
-                card.querySelector(".icon").textContent =
-                    condition[0];
-
-                card.querySelector(".condition").textContent =
-                    condition[1];
+                card.querySelector(".icon").textContent = condition[0];
+                card.querySelector(".condition").textContent = condition[1];
 
                 card.querySelector(".temp").textContent =
                     number(c.temperature_2m) + "°F";
@@ -443,61 +395,32 @@ async function updateWeather(){
                     number(d.temperature_2m_min[0]) +
                     "°F";
 
-                card.querySelector(".current").innerHTML =
-                    [
-                        [
-                            "Humidity",
-                            number(
-                                c.relative_humidity_2m
-                            ) + "%"
-                        ],
-                        [
-                            "Wind",
-                            number(
-                                c.wind_speed_10m
-                            ) + " mph"
-                        ],
-                        [
-                            "Gusts",
-                            number(
-                                c.wind_gusts_10m
-                            ) + " mph"
-                        ]
-                    ]
-                    .map(v => row(...v))
-                    .join("");
+                card.querySelector(".current").innerHTML = [
+                    ["Humidity",number(c.relative_humidity_2m)+"%"],
+                    ["Wind",number(c.wind_speed_10m)+" mph"],
+                    ["Gusts",number(c.wind_gusts_10m)+" mph"]
+                ].map(v=>row(...v)).join("");
 
-            }catch(error){
+            }catch{
 
-                console.error(error);
-
-                card.querySelector(".condition")
-                    .textContent =
+                card.querySelector(".condition").textContent =
                     "Weather Unavailable";
-
             }
 
         })
-
     );
 }
 
-const bg =
-    document.getElementById("pageBackground");
+const bg = document.getElementById("pageBackground");
+const bgError = document.getElementById("backgroundError");
 
-const bgError =
-    document.getElementById("backgroundError");
-
-bg.onload = () => bgError.hidden = true;
-bg.onerror = () => bgError.hidden = false;
-
-syncOnlineTime();
-setInterval(syncOnlineTime, 600000);
+bg.onload = ()=>bgError.hidden = true;
+bg.onerror = ()=>bgError.hidden = false;
 
 updateClocks();
-
 updateWeather();
-setInterval(updateWeather, 300000);
+
+setInterval(updateWeather,300000);
 </script>
 
 </body>
