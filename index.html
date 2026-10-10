@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,7 +118,7 @@ main{
 }
 
 .feels{
-    color:#ffffff;
+    color:#fff;
     font-size:1.2rem;
     font-weight:600;
     margin-top:5px;
@@ -153,14 +154,25 @@ main{
     color:#d7e5ff;
 }
 
-#backgroundError{
+#backgroundError,
+#timeStatus{
     position:fixed;
-    right:10px;
     bottom:10px;
     background:#8b1926;
-    padding:10px;
+    color:#fff;
+    padding:10px 14px;
     border-radius:6px;
     z-index:50;
+    font-size:14px;
+    max-width:calc(100vw - 20px);
+}
+
+#backgroundError{
+    right:10px;
+}
+
+#timeStatus{
+    left:10px;
 }
 
 @media (max-width:1600px){
@@ -170,7 +182,8 @@ main{
 }
 
 @media (max-width:1100px){
-    body{
+    html,body{
+        height:auto;
         overflow:auto;
     }
 
@@ -181,6 +194,7 @@ main{
 
     main{
         height:auto;
+        min-height:100vh;
     }
 }
 
@@ -194,10 +208,18 @@ main{
 
 <body>
 
-<img id="pageBackground" src="logo.png" alt="FedEx Freight Logo Background">
+<img
+    id="pageBackground"
+    src="logo.png"
+    alt="FedEx Freight Logo Background"
+>
 
 <div id="backgroundError" hidden>
-Unable to load logo.png
+    Unable to load logo.png
+</div>
+
+<div id="timeStatus" role="status" aria-live="polite">
+    Synchronizing online time...
 </div>
 
 <main>
@@ -207,73 +229,84 @@ Unable to load logo.png
 <script>
 "use strict";
 
-const WEATHER_ENDPOINT = "https://api.open-meteo.com/v1/forecast";
+const WEATHER_ENDPOINT =
+    "https://api.open-meteo.com/v1/forecast";
+
+const TIME_ENDPOINT =
+    "https://timeapi.io/api/Time/current/zone?timeZone=UTC";
 
 const cities = [
-{
-    id:"harrison",
-    name:"Harrison, AR",
-    lat:36.2298,
-    lon:-93.1077,
-    tz:"America/Chicago",
-    zone:"CENTRAL"
-},
-{
-    id:"memphis",
-    name:"Memphis, TN",
-    lat:35.1495,
-    lon:-90.0490,
-    tz:"America/Chicago",
-    zone:"CENTRAL"
-},
-{
-    id:"newyork",
-    name:"New York, NY",
-    lat:40.7128,
-    lon:-74.0060,
-    tz:"America/New_York",
-    zone:"EASTERN"
-},
-{
-    id:"losangeles",
-    name:"Los Angeles, CA",
-    lat:34.0522,
-    lon:-118.2437,
-    tz:"America/Los_Angeles",
-    zone:"PACIFIC"
-},
-{
-    id:"denver",
-    name:"Denver, CO",
-    lat:39.7392,
-    lon:-104.9903,
-    tz:"America/Denver",
-    zone:"MOUNTAIN"
-}
+    {
+        id:"harrison",
+        name:"Harrison, AR",
+        lat:36.2298,
+        lon:-93.1077,
+        tz:"America/Chicago",
+        zone:"CENTRAL"
+    },
+    {
+        id:"memphis",
+        name:"Memphis, TN",
+        lat:35.1495,
+        lon:-90.0490,
+        tz:"America/Chicago",
+        zone:"CENTRAL"
+    },
+    {
+        id:"newyork",
+        name:"New York, NY",
+        lat:40.7128,
+        lon:-74.0060,
+        tz:"America/New_York",
+        zone:"EASTERN"
+    },
+    {
+        id:"losangeles",
+        name:"Los Angeles, CA",
+        lat:34.0522,
+        lon:-118.2437,
+        tz:"America/Los_Angeles",
+        zone:"PACIFIC"
+    },
+    {
+        id:"denver",
+        name:"Denver, CO",
+        lat:39.7392,
+        lon:-104.9903,
+        tz:"America/Denver",
+        zone:"MOUNTAIN"
+    }
 ];
 
 const weatherCodes = {
-0:["☀️","Clear"],
-1:["🌤️","Mostly Clear"],
-2:["⛅","Partly Cloudy"],
-3:["☁️","Cloudy"],
-45:["🌫️","Fog"],
-48:["🌫️","Fog"],
-51:["🌦️","Light Drizzle"],
-53:["🌦️","Drizzle"],
-55:["🌧️","Heavy Drizzle"],
-61:["🌦️","Light Rain"],
-63:["🌧️","Rain"],
-65:["🌧️","Heavy Rain"],
-71:["🌨️","Light Snow"],
-73:["❄️","Snow"],
-75:["❄️","Heavy Snow"],
-80:["🌦️","Showers"],
-81:["🌧️","Rain Showers"],
-82:["⛈️","Heavy Showers"],
-95:["⛈️","Thunderstorm"],
-96:["⛈️","Storm"],
-99:["⛈️","Severe Storm"]
+    0:["☀️","Clear"],
+    1:["🌤️","Mostly Clear"],
+    2:["⛅","Partly Cloudy"],
+    3:["☁️","Cloudy"],
+    45:["🌫️","Fog"],
+    48:["🌫️","Fog"],
+    51:["🌦️","Light Drizzle"],
+    53:["🌦️","Drizzle"],
+    55:["🌧️","Heavy Drizzle"],
+    56:["🌧️","Freezing Drizzle"],
+    57:["🌧️","Heavy Freezing Drizzle"],
+    61:["🌦️","Light Rain"],
+    63:["🌧️","Rain"],
+    65:["🌧️","Heavy Rain"],
+    66:["🌧️","Freezing Rain"],
+    67:["🌧️","Heavy Freezing Rain"],
+    71:["🌨️","Light Snow"],
+    73:["❄️","Snow"],
+    75:["❄️","Heavy Snow"],
+    77:["❄️","Snow Grains"],
+    80:["🌦️","Showers"],
+    81:["🌧️","Rain Showers"],
+    82:["🌧️","Heavy Showers"],
+    85:["🌨️","Snow Showers"],
+    86:["❄️","Heavy Snow Showers"],
+    95:["⛈️","Thunderstorm"],
+    96:["⛈️","Thunderstorm with Hail"],
+    99:["⛈️","Thunderstorm with Heavy Hail"]
 };
 
 function number(value,digits=0){
@@ -284,138 +317,337 @@ function number(value,digits=0){
 
 function row(label,value){
     return `
-    <div class="row">
-        <span>${label}</span>
-        <strong>${value}</strong>
-    </div>
+        <div class="row">
+            <span>${label}</span>
+            <strong>${value}</strong>
+        </div>
     `;
 }
 
 document.getElementById("weatherGrid").innerHTML =
-cities.map(city => `
-<article class="card" id="${city.id}">
-    <div class="city">${city.name}</div>
-    <div class="zone">${city.zone} TIME</div>
-    <div class="time">--:--:--</div>
-    <div class="icon">🌤️</div>
-    <div class="temp">--°F</div>
-    <div class="condition">Loading...</div>
-    <div class="feels"></div>
-    <div class="highlow">H: --°F | L: --°F</div>
+    cities.map(city => `
+        <article class="card" id="${city.id}">
+            <div class="city">${city.name}</div>
+            <div class="zone">${city.zone} TIME</div>
+            <div class="time">--:--:--</div>
+            <div class="icon">🌤️</div>
+            <div class="temp">--°F</div>
+            <div class="condition">Loading...</div>
+            <div class="feels"></div>
+            <div class="highlow">H: --°F | L: --°F</div>
 
-    <div class="section">Current Conditions</div>
+            <div class="section">Current Conditions</div>
+            <div class="current"></div>
+        </article>
+    `).join("");
 
-    <div class="current"></div>
-</article>
-`).join("");
+/* ONLINE TIME */
+
+let onlineTimeMs = null;
+let onlineTimeAnchor = 0;
+let timeSyncRunning = false;
+let clockStarted = false;
+
+const timeStatus = document.getElementById("timeStatus");
+
+const clockDisplays = cities.map(city => ({
+    element:document.querySelector(`#${city.id} .time`),
+    formatter:new Intl.DateTimeFormat("en-US",{
+        timeZone:city.tz,
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+    })
+}));
+
+function renderOnlineClocks(){
+    if(onlineTimeMs === null) return;
+
+    // Count elapsed time independently of the device's wall clock.
+    const now = new Date(
+        onlineTimeMs + performance.now() - onlineTimeAnchor
+    );
+
+    clockDisplays.forEach(clock => {
+        clock.element.textContent = clock.formatter.format(now);
+    });
+}
+
+async function syncOnlineTime(){
+    if(timeSyncRunning) return;
+    timeSyncRunning = true;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(),10000);
+
+    try{
+        const started = performance.now();
+
+        const response = await fetch(TIME_ENDPOINT,{
+            cache:"no-store",
+            signal:controller.signal
+        });
+
+        if(!response.ok){
+            throw new Error(
+                `Time service returned ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+        const received = performance.now();
+
+        const fields = [
+            data.year,
+            data.month,
+            data.day,
+            data.hour,
+            data.minute,
+            data.seconds
+        ];
+
+        if(!fields.every(Number.isInteger)){
+            throw new Error("Invalid online time response");
+        }
+
+        const milliseconds = data.milliSeconds ?? 0;
+
+        if(
+            data.year < 2000 ||
+            data.month < 1 || data.month > 12 ||
+            data.day < 1 || data.day > 31 ||
+            data.hour < 0 || data.hour > 23 ||
+            data.minute < 0 || data.minute > 59 ||
+            data.seconds < 0 || data.seconds > 59 ||
+            !Number.isInteger(milliseconds) ||
+            milliseconds < 0 || milliseconds > 999
+        ){
+            throw new Error("Online time fields out of range");
+        }
+
+        // The API was explicitly asked for UTC.
+        const serverTime = Date.UTC(
+            data.year,
+            data.month - 1,
+            data.day,
+            data.hour,
+            data.minute,
+            data.seconds,
+            milliseconds
+        );
+
+        if(!Number.isFinite(serverTime)){
+            throw new Error("Invalid online timestamp");
+        }
+
+        // Approximate network transit compensation.
+        onlineTimeMs = serverTime + (received - started) / 2;
+        onlineTimeAnchor = received;
+
+        timeStatus.hidden = true;
+        renderOnlineClocks();
+
+    }catch(error){
+        timeStatus.hidden = false;
+
+        timeStatus.textContent = onlineTimeMs === null
+            ? "Online time unavailable — retrying"
+            : "Time sync unavailable — using last online sync";
+
+        console.warn(
+            "Online time synchronization failed:",
+            error
+        );
+
+    }finally{
+        clearTimeout(timeout);
+        timeSyncRunning = false;
+    }
+}
 
 function updateClocks(){
+    if(clockStarted) return;
+    clockStarted = true;
 
-    cities.forEach(city=>{
-        document.querySelector(`#${city.id} .time`).textContent =
-            new Date().toLocaleTimeString("en-US",{
-                timeZone:city.tz,
-                hour:"2-digit",
-                minute:"2-digit",
-                second:"2-digit"
-            });
+    syncOnlineTime();
+
+    setInterval(renderOnlineClocks,250);
+
+    // Resynchronize every five minutes.
+    setInterval(syncOnlineTime,300000);
+
+    // Retry every 30 seconds until the first successful sync.
+    setInterval(() => {
+        if(onlineTimeMs === null){
+            syncOnlineTime();
+        }
+    },30000);
+
+    window.addEventListener("online",syncOnlineTime);
+
+    document.addEventListener("visibilitychange",() => {
+        if(!document.hidden){
+            syncOnlineTime();
+        }
     });
 
-    const delay = 1000 - (Date.now() % 1000);
-    setTimeout(updateClocks, delay);
+    window.addEventListener("pageshow",syncOnlineTime);
 }
+
+/* WEATHER */
 
 async function getJSON(url){
-    const response = await fetch(url);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(),15000);
 
-    if(!response.ok){
-        throw new Error(response.status);
+    try{
+        const response = await fetch(url,{
+            cache:"no-store",
+            signal:controller.signal
+        });
+
+        if(!response.ok){
+            throw new Error(`Request failed: ${response.status}`);
+        }
+
+        return await response.json();
+
+    }finally{
+        clearTimeout(timeout);
     }
-
-    return response.json();
 }
+
+let weatherUpdateRunning = false;
 
 async function updateWeather(){
+    if(weatherUpdateRunning) return;
+    weatherUpdateRunning = true;
 
-    await Promise.all(
-        cities.map(async city=>{
+    try{
+        await Promise.all(
+            cities.map(async city => {
+                const card = document.getElementById(city.id);
 
-            const card = document.getElementById(city.id);
+                try{
+                    const url = new URL(WEATHER_ENDPOINT);
 
-            try{
+                    url.search = new URLSearchParams({
+                        latitude:city.lat,
+                        longitude:city.lon,
 
-                const url = new URL(WEATHER_ENDPOINT);
+                        current:[
+                            "temperature_2m",
+                            "relative_humidity_2m",
+                            "apparent_temperature",
+                            "weather_code",
+                            "wind_speed_10m",
+                            "wind_gusts_10m"
+                        ].join(","),
 
-                url.search = new URLSearchParams({
-                    latitude:city.lat,
-                    longitude:city.lon,
-                    current:[
-                        "temperature_2m",
-                        "relative_humidity_2m",
-                        "apparent_temperature",
-                        "weather_code",
-                        "wind_speed_10m",
-                        "wind_gusts_10m"
-                    ].join(","),
+                        daily:[
+                            "temperature_2m_max",
+                            "temperature_2m_min"
+                        ].join(","),
 
-                    daily:[
-                        "temperature_2m_max",
-                        "temperature_2m_min"
-                    ].join(","),
+                        temperature_unit:"fahrenheit",
+                        wind_speed_unit:"mph",
+                        timezone:city.tz
+                    });
 
-                    temperature_unit:"fahrenheit",
-                    wind_speed_unit:"mph",
-                    timezone:city.tz
-                });
+                    const data = await getJSON(url);
 
-                const data = await getJSON(url);
+                    const c = data.current;
+                    const d = data.daily;
 
-                const c = data.current;
-                const d = data.daily;
+                    if(!c || !d){
+                        throw new Error("Missing weather data");
+                    }
 
-                const condition =
-                    weatherCodes[c.weather_code] ||
-                    ["❓","Unknown"];
+                    const condition =
+                        weatherCodes[c.weather_code] ||
+                        ["❓","Unknown"];
 
-                card.querySelector(".icon").textContent = condition[0];
-                card.querySelector(".condition").textContent = condition[1];
+                    card.querySelector(".icon").textContent =
+                        condition[0];
 
-                card.querySelector(".temp").textContent =
-                    number(c.temperature_2m) + "°F";
+                    card.querySelector(".condition").textContent =
+                        condition[1];
 
-                card.querySelector(".feels").textContent =
-                    "Feels Like " +
-                    number(c.apparent_temperature) +
-                    "°F";
+                    card.querySelector(".temp").textContent =
+                        number(c.temperature_2m) + "°F";
 
-                card.querySelector(".highlow").textContent =
-                    "H: " +
-                    number(d.temperature_2m_max[0]) +
-                    "°F | L: " +
-                    number(d.temperature_2m_min[0]) +
-                    "°F";
+                    card.querySelector(".feels").textContent =
+                        "Feels Like " +
+                        number(c.apparent_temperature) +
+                        "°F";
 
-                card.querySelector(".current").innerHTML = [
-                    ["Humidity",number(c.relative_humidity_2m)+"%"],
-                    ["Wind",number(c.wind_speed_10m)+" mph"],
-                    ["Gusts",number(c.wind_gusts_10m)+" mph"]
-                ].map(v=>row(...v)).join("");
+                    card.querySelector(".highlow").textContent =
+                        "H: " +
+                        number(d.temperature_2m_max?.[0]) +
+                        "°F | L: " +
+                        number(d.temperature_2m_min?.[0]) +
+                        "°F";
 
-            }catch{
+                    card.querySelector(".current").innerHTML = [
+                        [
+                            "Humidity",
+                            number(c.relative_humidity_2m) + "%"
+                        ],
+                        [
+                            "Wind",
+                            number(c.wind_speed_10m) + " mph"
+                        ],
+                        [
+                            "Gusts",
+                            number(c.wind_gusts_10m) + " mph"
+                        ]
+                    ].map(values => row(...values)).join("");
 
-                card.querySelector(".condition").textContent =
-                    "Weather Unavailable";
-            }
+                }catch(error){
+                    // Remove old readings so they aren't mistaken
+                    // for current conditions after a failed refresh.
+                    card.querySelector(".icon").textContent = "❓";
+                    card.querySelector(".condition").textContent =
+                        "Weather Unavailable";
 
-        })
-    );
+                    card.querySelector(".temp").textContent = "--°F";
+                    card.querySelector(".feels").textContent = "";
+                    card.querySelector(".highlow").textContent =
+                        "H: --°F | L: --°F";
+                    card.querySelector(".current").innerHTML = "";
+
+                    console.warn(
+                        `Weather update failed for ${city.name}:`,
+                        error
+                    );
+                }
+            })
+        );
+
+    }finally{
+        weatherUpdateRunning = false;
+    }
 }
+
+/* BACKGROUND */
 
 const bg = document.getElementById("pageBackground");
 const bgError = document.getElementById("backgroundError");
 
-bg.onload = ()=>bgError.hidden = true;
-bg.onerror = ()=>bgError.hidden = false;
+function checkBackground(){
+    bgError.hidden = bg.naturalWidth > 0;
+}
+
+bg.addEventListener("load",checkBackground);
+bg.addEventListener("error",() => {
+    bgError.hidden = false;
+});
+
+if(bg.complete){
+    checkBackground();
+}
+
+/* START */
 
 updateClocks();
 updateWeather();
